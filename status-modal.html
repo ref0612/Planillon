@@ -1,0 +1,58 @@
+<!-- Status Change Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="statusModalLabel">Cambiar Estado del Servicio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Service Information -->
+        <div class="service-info">
+          <p><strong>Servicio:</strong> <span id="serviceName">-</span></p>
+          <p><strong>Variante:</strong> <span id="serviceVariant">-</span></p>
+          <p><strong>Hora:</strong> <span id="serviceTime">-</span></p>
+        </div>
+        
+        <!-- Status Options -->
+        <div class="mb-4">
+          <label class="form-label mb-3 d-block">Seleccione el nuevo estado:</label>
+          
+          <div class="status-option selected" data-status="active" onclick="selectStatus('active')">
+            <div class="status-color status-active"></div>
+            <span>Abierto</span>
+            <input type="radio" name="status" value="active" class="d-none" checked>
+          </div>
+          
+          <div class="status-option" data-status="alert" onclick="selectStatus('alert')">
+            <div class="status-color status-alert"></div>
+            <span>Cerrado</span>
+            <input type="radio" name="status" value="alert" class="d-none">
+          </div>
+          
+          <div class="status-option" data-status="pending" onclick="selectStatus('pending')">
+            <div class="status-color status-pending"></div>
+            <span>Suspendido</span>
+            <input type="radio" name="status" value="pending" class="d-none">
+          </div>
+          
+          <div class="status-option" data-status="inactive" onclick="selectStatus('inactive')">
+            <div class="status-color status-inactive"></div>
+            <span>Panne</span>
+            <input type="radio" name="status" value="inactive" class="d-none">
+          </div>
+        </div>
+        
+        <!-- Optional: Add a notes field -->
+        <div class="mb-3">
+          <label for="statusNotes" class="form-label">Notas (opcional):</label>
+          <textarea class="form-control" id="statusNotes" rows="2" placeholder="Agregar notas sobre el cambio de estado..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" onclick="saveStatus()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>

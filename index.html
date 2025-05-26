@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- ============================================
+     MÓDULO: ESTRUCTURA PRINCIPAL DEL DOCUMENTO
+     Contiene la estructura base del HTML y metadatos
+     ============================================ -->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gestor de Tráfico - Ruta Bus</title>
+<style>
+  /* ========== ESTILOS BASE ========== */
+  /* Reset de estilos y configuración inicial */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+
+  /* ========== LAYOUT PRINCIPAL ========== */
+  /* Estructura general de la aplicación */
+  .app {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ========== SIDEBAR ========== */
+  /* Estilos para la barra lateral de navegación */
+  .sidebar {
+    width: 240px;
+    background: #1d1d1f;
+    color: #f5f5f7;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sidebar .logo {
+    padding: 24px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #d4a574;
+    border-bottom: 1px solid #333;
+    letter-spacing: -0.5px;
+  }
+
+  .sidebar nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  .sidebar ul {
+    list-style: none;
+  }
+
+  .sidebar li {
+    position: relative;
+    margin: 2px 8px;
+  }
+
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    color: #86868b;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+
+  .sidebar a:hover {
+    background: #2d2d2f;
+    color: #f5f5f7;
+  }
+
+  .sidebar a.active {
+    background: #d4a574;
+    color: #1d1d1f;
+    font-weight: 500;
+  }
+
+  .sidebar a svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ========== CONTENEDOR PRINCIPAL ========== */
+  /* Estructura del área de contenido principal */
+  .main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ========== HEADER PRINCIPAL ========== */
+  /* Estilos para la barra superior */
+  .main-header {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e5e7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .menu-toggle span {
+    width: 20px;
+    height: 2px;
+    background: #1d1d1f;
+    border-radius: 1px;
+    transition: all 0.3s;
+  }
+
+  .main-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1d1f;
+  }
+
+  .header-date {
+    font-size: 13px;
+    color: #86868b;
+  }
+
+  /* Contenido principal con scroll */
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  /* Módulo superior mejorado */
+  .top-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1d1d1f;
+  }
+
+  /* Layout superior optimizado */
+    .modules-container {
+  display: flex;
+  justify-content: space-between; /* Para que los hijos se separen */
+  align-items: flex-start; /* Que queden alineados arriba */
+  gap: 20px; /* Separación opcional */
+}
+
+  /* Contenedor izquierdo */
+  .left-modules {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    gap: 20px;
+  }
+
+  /* Fila superior unificada */
+  .top-row {
+    display: flex;
+    gap: 16px;
+    /* MODIFICADO: Cambiado de flex-end a flex-start para alinear arriba */
+    align-items: flex-start; 
+  }
+
+  /* Módulo de búsqueda ampliado */
+  .search-module {
+    background: #f5f5f7;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    min-width: 550px;
+  }
+
+  .search-module .form-group {
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: #86868b;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #d2d2d7;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-size: 14px;
+    background: white;
+    transition: border-color 0.2s;
+  }
+
+  .form-group select {
+    width: 160px;
+  }
+
+  .form-group input[type="date"] {
+    width: 140px;
+  }
+
+  .form-group select:focus,
+  .form-group input:focus {
+    outline: none;
+    border-color: #d4a574;
+  }
+
+  .btn-primary {
+    height: 36px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 0 24px;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover {
+    background: #dc2626;
+  }
+
+  /* Métricas KPI más compactas */
+  .metrics-module {
+    background: #f5f5f7;
+    border-radius: 8px;
+    padding: 12px;
+    flex: 1;
+  }
+
+  .metrics-grid {
+    /* MODIFICADO: Cambiado a grid y 2 columnas por defecto */
+    display: flex;
+    gap: 10px;
+  }
+
+  .metric-card {
+    background: white;
+    border-radius: 6px;
+    padding: 10px 12px; /* Ajustado padding si es necesario */
+    border: 1px solid #e5e5e7;
+    min-width: 0;
+    /* NUEVO: Flex para alinear icono y texto */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre icono y texto */
+    flex:1;
+    min-width:80px;
+  }
+
+  /* NUEVO: Estilos para el contenedor del icono */
+  .metric-icon-container {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ef4444; /* Fondo rojo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Evita que el icono se encoja */
+  }
+
+  .metric-icon-container i {
+    font-size: 15px; /* Tamaño del icono */
+    color: white;   /* Icono blanco */
+  }
+
+  /* NUEVO: Estilos para el contenedor de texto (etiqueta y valor) */
+  .metric-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea texto a la izquierda */
+    overflow: hidden; /* Para controlar text-overflow si es necesario */
+  }
+
+  .metric-label {
+    font-size: 9px;
+    color: #86868b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .metric-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ef4444;
+    white-space: nowrap;
+    overflow: hidden; /* Para controlar si el valor es muy largo */
+    text-overflow: ellipsis;
+  }
+
+  /* Módulo de gráfico - ancho completo */
+  .chart-module {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e5e7;
+    padding: 15px;
+    margin-top: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+    margin-right: 20px;
+    box-sizing: border-box;
+  }
+
+  .chart-module h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1d1d1f;
+  }
+
+  .chart-placeholder {
+    height: 160px;
+    background: white;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    padding: 15px 20px 35px 20px;
+  }
+
+  /* Gráfico con cuadrícula */
+  .chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* Líneas horizontales de la cuadrícula */
+  .grid-line-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #f5f5f7;
+  }
+
+  .grid-line-h:nth-child(1) { bottom: 20%; }
+  .grid-line-h:nth-child(2) { bottom: 40%; }
+  .grid-line-h:nth-child(3) { bottom: 60%; }
+  .grid-line-h:nth-child(4) { bottom: 80%; }
+
+  /* Líneas verticales de la cuadrícula */
+  .grid-line-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #f5f5f7;
+  }
+
+  /* Etiquetas del eje Y */
+  .y-labels {
+    position: absolute;
+    left: 0;
+    top: 15px;
+    bottom: 35px;
+    width: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #86868b;
+    text-align: right;
+  }
+
+  .y-label {
+    line-height: 1;
+  }
+
+  /* Etiquetas del eje X */
+  .x-labels {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 10px;
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #86868b;
+  }
+
+  .x-label {
+    text-align: center;
+    flex: 1;
+  }
+
+  /* Línea del gráfico */
+  .chart-line-svg {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    bottom: 35px;
+  }
+
+  .data-line {
+    fill: none;
+    stroke: #ef4444;
+    stroke-width: 2;
+  }
+
+  .data-point {
+    fill: #ef4444;
+    r: 2.5;
+  }
+
+  /* Tabla de tarifas - columna derecha reducida */
+  .tariff-module {
+    width: 320px;
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+
+  .tariff-container {
+    position: sticky;
+    top: 20px;
+  }
+
+  .tariff-summary {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e5e7;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .tariff-summary h4 {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 14px;
+    background: #f5f5f7;
+    border-bottom: 1px solid #e5e5e7;
+    color: #1d1d1f;
+    margin: 0;
+  }
+
+  /* Estilos para los botones de alternancia */
+  .btn-group {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+  
+  .btn-group .btn {
+    color: #495057;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  
+  .btn-group .btn:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-right: none;
+  }
+  
+  .btn-group .btn:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  
+  .btn-group .btn-check:checked + .btn {
+    background-color: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
+  
+  .btn-group .btn:hover {
+    background-color: #e9ecef;
+  }
+  
+  .btn-check {
+    position: absolute;
+    clip: rect(0,0,0,0);
+    pointer-events: none;
+  }
+
+  .tariff-table {
+    width: 100%;
+    font-size: 11px;
+  }
+
+  .tariff-table tr {
+    border-bottom: 1px solid #f5f5f7;
+  }
+
+  .tariff-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .tariff-table td {
+    padding: 6px 14px;
+  }
+
+  .tariff-table td:last-child {
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .tariff-table tr.highlight {
+    background: #fee2e2;
+  }
+
+  .tariff-table tr.total {
+    font-weight: 600;
+    background: #f5f5f7;
+  }
+
+  /* Sección de tabla detalle */
+  .detail-section {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .detail-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e5e7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detail-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .export-btn {
+    padding: 8px 16px;
+    background: #f5f5f7;
+    border: 1px solid #d2d2d7;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .export-btn:hover {
+    background: #e5e5e7;
+  }
+
+  /* Tabla mejorada */
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .detail-table thead {
+    background: #f5f5f7;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .detail-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    color: #86868b;
+    border-bottom: 1px solid #e5e5e7;
+    white-space: nowrap;
+  }
+
+  .detail-table tbody tr {
+    border-bottom: 1px solid #f5f5f7;
+    transition: background 0.1s;
+  }
+
+  .detail-table tbody tr:hover {
+    background: #fafafa;
+  }
+
+  .detail-table td {
+    padding: 12px 16px;
+    color: #1d1d1f;
+  }
+
+  /* Estados */
+  .status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .status-indicator:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .status-active { background: #10b981; }
+  .status-pending { background: #f59e0b; }
+  .status-inactive { background: #6b7280; }
+  .status-alert { background: #ef4444; }
+
+  /* Acciones */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e5e7;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: #f5f5f7;
+    border-color: #d2d2d7;
+  }
+
+  .action-btn svg {
+    width: 16px;
+    height: 16px;
+    color: #86868b;
+  }
+
+  /* Estilos para el modal de cambio de estado */
+  .status-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .status-option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .status-option.selected {
+    background-color: #e9ecef;
+  }
+  
+  .status-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+  }
+  
+  /* Estilos para modales personalizados */
+  .modal-header {
+    background: #1d1d1f;
+    color: white;
+    border-bottom: 1px solid #333;
+  }
+  
+  .btn-close-white {
+    filter: invert(1);
+  }
+  
+  /* Estilos para el modal de edición */
+  .form-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #86868b;
+    margin-bottom: 4px;
+  }
+  
+  .form-control, .form-select {
+    border: 1px solid #d2d2d7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  
+  .form-control:focus, .form-select:focus {
+    border-color: #d4a574;
+    box-shadow: 0 0 0 0.25rem rgba(212, 165, 116, 0.25);
+  }
+  
+  .card {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    background-color: #f5f5f7;
+    border-bottom: 1px solid #e5e5e7;
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  
+  .modal-footer {
+    background-color: #f5f5f7;
+    border-top: 1px solid #e5e5e7;
+  }
+  
+  /* Responsive ajustado */
+  @media (max-width: 1400px) {
+    .search-module {
+      min-width: 480px;
+    }
+    
+    .form-group select {
+      width: 140px;
+    }
+    
+    .form-group input[type="date"] {
+      width: 130px;
+    }
+    
+    .tariff-module {
+      width: 200px;
+    }
+    
+    .metric-value {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .modules-container {
+      flex-direction: column;
+    }
+    
+    .search-module {
+      min-width: auto;
+    }
+    
+    .tariff-module {
+      width: 100%;
+    }
+    
+    .tariff-container {
+      position: static;
+    }
+    
+    .top-row {
+      flex-direction: column;
+      align-items: stretch; /* Para que los hijos ocupen todo el ancho en modo columna */
+    }
+    
+    .search-module {
+      justify-content: space-between;
+    }
+    
+    /* La regla de .metrics-grid para grid 2x2 ya está por defecto,
+       así que no es necesario repetirla aquí a menos que quieras un comportamiento diferente
+       específicamente para este breakpoint.
+    */
+    
+    .tariff-module {
+      order: 3;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: -240px;
+      top: 0;
+      bottom: 0;
+      z-index: 100;
+      transition: left 0.3s;
+    }
+    
+    .sidebar.open {
+      left: 0;
+    }
+    
+    .menu-toggle {
+      display: flex;
+    }
+    
+    .main-header {
+      padding: 12px 16px;
+    }
+    
+    .main-title {
+      font-size: 20px;
+    }
+    
+    .main-content {
+      padding: 16px;
+    }
+    
+    .detail-table {
+      font-size: 12px;
+    }
+    
+    .detail-table th,
+    .detail-table td {
+      padding: 8px 12px;
+    }
+
+    /* En pantallas pequeñas, las métricas podrían ir 1 por fila */
+    .metrics-grid {
+        grid-template-columns: 1fr; 
+    }
+  }
+</style>
+<!-- ============================================
+     MÓDULO: DEPENDENCIAS EXTERNAS
+     Enlaces a hojas de estilo y fuentes externas
+     ============================================ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<!-- ============================================
+     MÓDULO: ESTRUCTURA DEL CUERPO
+     Contenido principal de la aplicación
+     ============================================ -->
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">RUTA BUS</div>
+      <nav>
+        <ul>
+          <li>
+            <a href="#">
+              <i class="fas fa-list-check"></i>
+              <span>Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-calendar-check"></i>
+              <span>Programados</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="active">
+              <i class="fas fa-traffic-light"></i>
+              <span>Gestor de tráfico</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-users"></i>
+              <span>Cuentas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-cog"></i>
+              <span>Administrar</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-shield-halved"></i>
+              <span>Control de seguridad</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-gear"></i>
+              <span>Configuración</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-chart-simple"></i>
+              <span>Informes</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="main-container">
+  <header class="main-header">
+    <div class="header-left">
+      <div class="menu-toggle" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <h1 class="main-title">Bienvenido al Gestor de tráfico</h1>
+    </div>
+    <div id="currentDateTime" class="header-date"></div>
+  </header>
+
+  <main class="main-content">
+    <section class="top-section">
+      <div class="modules-container">
+
+        <div class="left-modules">
+          <div class="top-row">
+            <form class="search-module">
+              <div class="form-group">
+                <label for="origen">Origen</label>
+                <select id="origen">
+                  <option value="Melipilla" selected>Melipilla</option>
+                  <option value="Santiago">Santiago</option>
+                  <option value="Valparaíso">Valparaíso</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="destino">Destino</label>
+                <select id="destino">
+                  <option value="Santiago" selected>Santiago</option>
+                  <option value="Melipilla">Melipilla</option>
+                  <option value="Valparaíso">Valparaíso</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" value="2025-06-12" />
+              </div>
+              <button type="submit" class="btn-primary">Buscar</button>
+            </form>
+
+            <div class="metrics-module">
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-icon-container">
+                    <i class="fas fa-wallet"></i>
+                  </div>
+                  <div class="metric-details">
+                    <div class="metric-label">Recaudación</div>
+                    <div class="metric-value">$94.828.674</div>
+                  </div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-icon-container">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <div class="metric-details">
+                    <div class="metric-label">Pasajeros/vuelta</div>
+                    <div class="metric-value">34</div>
+                  </div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-icon-container">
+                    <i class="fas fa-calculator"></i>
+                  </div>
+                  <div class="metric-details">
+                    <div class="metric-label">Prom/vuelta</div>
+                    <div class="metric-value">$75.813</div>
+                  </div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-icon-container">
+                    <i class="fas fa-route"></i>
+                  </div>
+                  <div class="metric-details">
+                    <div class="metric-label">Vueltas</div>
+                    <div class="metric-value">101,1</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-module">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="mb-0">Pasajeros transportados</h3>
+              <div class="btn-group btn-group-sm" role="group" aria-label="Período de visualización">
+                <input type="radio" class="btn-check" name="periodoView" id="diarioView" autocomplete="off" checked>
+                <label class="btn btn-outline-secondary" for="diarioView">Diario</label>
+                
+                <input type="radio" class="btn-check" name="periodoView" id="semanalView" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="semanalView">Semanal</label>
+                
+                <input type="radio" class="btn-check" name="periodoView" id="mensualView" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="mensualView">Mensual</label>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 10px; height: 160px;">
+              <div style="position: relative; height: 100%; width: 100%;">
+                <div class="chart-placeholder">
+              <!-- Etiquetas eje Y -->
+              <div class="y-labels">
+                <div class="y-label">0</div>
+                <div class="y-label">50</div>
+                <div class="y-label">100</div>
+                <div class="y-label">150</div>
+                <div class="y-label">200</div>
+                <div class="y-label">250</div>
+              </div>
+              
+              <!-- Contenedor de la cuadrícula -->
+              <div class="chart-grid">
+                <!-- Líneas horizontales -->
+                <div class="grid-line-h"></div>
+                <div class="grid-line-h"></div>
+                <div class="grid-line-h"></div>
+                <div class="grid-line-h"></div>
+                
+                <!-- Líneas verticales -->
+                <div class="grid-line-v" style="left: 10%"></div>
+                <div class="grid-line-v" style="left: 20%"></div>
+                <div class="grid-line-v" style="left: 30%"></div>
+                <div class="grid-line-v" style="left: 40%"></div>
+                <div class="grid-line-v" style="left: 50%"></div>
+                <div class="grid-line-v" style="left: 60%"></div>
+                <div class="grid-line-v" style="left: 70%"></div>
+                <div class="grid-line-v" style="left: 80%"></div>
+                <div class="grid-line-v" style="left: 90%"></div>
+              </div>
+              
+              <!-- SVG para la línea del gráfico -->
+              <svg class="chart-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="data-line" d="M 0,80 L 10,75 L 20,70 L 30,65 L 40,60 L 50,55 L 60,50 L 70,45 L 80,43 L 90,47 L 100,60"></path>
+                <!-- Puntos de datos -->
+                <circle class="data-point" cx="0" cy="80"></circle>
+                <circle class="data-point" cx="10" cy="75"></circle>
+                <circle class="data-point" cx="20" cy="70"></circle>
+                <circle class="data-point" cx="30" cy="65"></circle>
+                <circle class="data-point" cx="40" cy="60"></circle>
+                <circle class="data-point" cx="50" cy="55"></circle>
+                <circle class="data-point" cx="60" cy="50"></circle>
+                <circle class="data-point" cx="70" cy="45"></circle>
+                <circle class="data-point" cx="80" cy="43"></circle>
+                <circle class="data-point" cx="90" cy="47"></circle>
+                <circle class="data-point" cx="100" cy="60"></circle>
+              </svg>
+              
+              <!-- Etiquetas eje X -->
+              <div class="x-labels">
+                <div class="x-label">6</div>
+                <div class="x-label">7</div>
+                <div class="x-label">8</div>
+                <div class="x-label">9</div>
+                <div class="x-label">10</div>
+                <div class="x-label">11</div>
+                <div class="x-label">12</div>
+                <div class="x-label">13</div>
+                <div class="x-label">14</div>
+                <div class="x-label">15</div>
+              </div>
+            </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="tariff-module"> <div class="tariff-container">
+            <div class="tariff-summary"> <div class="px-3 pt-3 pb-1"> <h4 class="mb-2" style="font-size: 17px; font-weight: 700; color: #444;">Resumen de Tarifas</h4>
+                <div class="d-flex justify-content-center mb-2">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Vista de tarifas">
+                    <input type="radio" class="btn-check" name="tarifaView" id="categoriasView" autocomplete="off" checked>
+                    <label class="btn btn-light border me-1" for="categoriasView" style="font-size: 13px;">Categorías</label>
+                    <input type="radio" class="btn-check" name="tarifaView" id="asientosView" autocomplete="off">
+                    <label class="btn btn-light border" for="asientosView" style="font-size: 13px;">Asientos</label>
+                  </div>
+                </div>
+              </div>
+              <div id="categoriasTabla" class="tarifa-vista px-3 pb-3">
+                <table class="tariff-table table table-sm mb-0" style="width:100%; font-size:14px;">
+                  <tbody>
+                    <tr><td>G2700</td><td class="text-end">266</td></tr>
+                    <tr><td>G1350</td><td class="text-end">24</td></tr>
+                    <tr><td>G2450</td><td class="text-end">0</td></tr>
+                    <tr class="highlight" style="background: #fff7ea;"><td>G2600</td><td class="text-end">104</td></tr>
+                    <tr><td>B2700</td><td class="text-end">333</td></tr>
+                    <tr><td>B1900</td><td class="text-end">61</td></tr>
+                    <tr><td>B1350</td><td class="text-end">61</td></tr>
+                    <tr><td>CARAB</td><td class="text-end">19</td></tr>
+                    <tr><td>PRELI</td><td class="text-end">0</td></tr>
+                    <tr class="total" style="font-weight:600; border-top:2px solid #f1c40f;">
+                      <td>TOTAL</td><td class="text-end">965</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div id="asientosTabla" class="tarifa-vista px-3 pb-3" style="display: none;">
+                <table class="tariff-table table table-sm mb-0" style="width:100%; font-size:14px;">
+                  <tbody>
+                    <tr><td>Clásico</td><td class="text-end">150</td></tr>
+                    <tr><td>Ejecutivo</td><td class="text-end">120</td></tr>
+                    <tr><td>Semi Cama</td><td class="text-end">180</td></tr>
+                    <tr><td>Salón Cama</td><td class="text-end">200</td></tr>
+                    <tr><td>Salón Cama IND</td><td class="text-end">220</td></tr>
+                    <tr><td>Salón Cama Low</td><td class="text-end">190</td></tr>
+                    <tr><td>Pet Seat</td><td class="text-end">50</td></tr>
+                    <tr><td>Premium</td><td class="text-end">250</td></tr>
+                    <tr class="total" style="font-weight:600; border-top:2px solid #f1c40f;">
+                      <td>TOTAL</td><td class="text-end">1360</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+      <section class="detail-section">
+        <div class="detail-header">
+          <h2>Detalle de servicios</h2>
+          <button class="export-btn">+ Crear Servicio</button>
+        </div>
+        
+        <div class="table-wrapper">
+          <table class="detail-table">
+            <thead>
+              <tr>
+                <th>Acciones</th>
+                <th>Estado</th>
+                <th>Servicio</th>
+                <th>Variante</th>
+                <th>Bus</th>
+                <th>Hora</th>
+                <th>Conductor</th>
+                <th>G2700</th>
+                <th>G2600</th>
+                <th>G2500</th>
+                <th>B1750</th>
+                <th>B2700</th>
+                <th>B2600</th>
+                <th>G2500</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 6:30</td>
+                <td>Autopista X Pardo</td>
+                <td>54</td>
+                <td>06:30</td>
+                <td>Jatenas</td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 6:40</td>
+                <td>Autopista X Barros</td>
+                <td>55</td>
+                <td>06:40</td>
+                <td>Cpoblete</td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 7:30</td>
+                <td>Autopista X Pardo</td>
+                <td>52</td>
+                <td>07:00</td>
+                <td>Ctapia</td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 8:30</td>
+                <td>Autopista X Barros</td>
+                <td>53</td>
+                <td>07:10</td>
+                <td>Ltorres</td>
+                <td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 9:30</td>
+                <td>Autopista X Pardo</td>
+                <td>43</td>
+                <td>07:20</td>
+                <td>Tlopez</td>
+                <td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-active" data-status="active"></span></td>
+                <td>Stgo-Meli X Barros 10:30</td>
+                <td>Autopista X Pardo</td>
+                <td>25</td>
+                <td>08:00</td>
+                <td>Ctapia</td>
+                <td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-active" data-status="active"></span></td>
+                <td>Stgo-Meli X Barros 11:30</td>
+                <td>Autopista X Barros</td>
+                <td>35</td>
+                <td>08:10</td>
+                <td>Ltorres</td>
+                <td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-inactive" data-status="inactive"></span></td>
+                <td>Stgo-Meli X Barros 12:30</td>
+                <td>Autopista X Pardo</td>
+                <td>46</td>
+                <td>08:20</td>
+                <td>Tlopez</td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-pending" data-status="pending"></span></td>
+                <td>Stgo-Meli X Barros 13:30</td>
+                <td>Autopista X Barros</td>
+                <td>26</td>
+                <td>08:30</td>
+                <td>Adíaz</td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-pending" data-status="pending"></span></td>
+                <td>Stgo-Meli X Barros 14:30</td>
+                <td>Autopista X Pardo</td>
+                <td>30</td>
+                <td>08:40</td>
+                <td>Bsoto</td>
+                <td>5</td><td>5</td><td>5</td><td>5</td><td>5</td><td>5</td><td>5</td>
+              </tr>
+              <tr style="background: #fee2e2;">
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-alert" data-status="alert"></span></td>
+                <td>Stgo-Meli X Barros 15:30</td>
+                <td>Autopista X Barros</td>
+                <td>23</td>
+                <td>07:30</td>
+                <td>Adíaz</td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-active" data-status="active"></span></td>
+                <td>Stgo-Meli X Barros 16:30</td>
+                <td>Autopista X Pardo</td>
+                <td>32</td>
+                <td>07:40</td>
+                <td>Bsoto</td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-history" title="Historial">
+                      <i class="fas fa-history"></i>
+                    </button>
+                    <button class="action-btn" title="Pasajeros">
+                      <i class="fas fa-users"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><span class="status-indicator status-active" data-status="active"></span></td>
+                <td>Stgo-Meli X Barros 17:30</td>
+                <td>Autopista X Barros</td>
+                <td>12</td>
+                <td>07:50</td>
+                <td>Acontreras</td>
+                <td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+  <!-- ============================================
+       MÓDULO: MODAL DE ESTADO
+       Contiene el formulario para cambiar el estado de un servicio
+       ============================================ -->
+  <!-- ============================================
+       MÓDULO: MODAL DE ESTADO
+       Permite cambiar el estado de un servicio (activo, inactivo, pendiente, alerta)
+       ============================================ -->
+  <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusModalLabel">Cambio de estado del servicio</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <div class="mb-2">Seleccione nuevo estado:</div>
+            <div class="mb-2">Servicio: <span id="servicioNombre"></span></div>
+            <div class="mb-2">Variante: <span id="servicioVariante"></span></div>
+            <div class="mb-3">Hora: <span id="servicioHora"></span></div>
+            
+            <div id="statusOptions">
+              <div class="status-option" data-status="active" onclick="selectStatus('active')">
+                <span class="status-color status-active"></span>
+                <span>Abierto</span>
+                <input type="radio" name="status" value="active" class="d-none">
+              </div>
+              <div class="status-option" data-status="alert" onclick="selectStatus('alert')">
+                <span class="status-color status-alert"></span>
+                <span>Cerrado</span>
+                <input type="radio" name="status" value="alert" class="d-none">
+              </div>
+              <div class="status-option" data-status="pending" onclick="selectStatus('pending')">
+                <span class="status-color status-pending"></span>
+                <span>Suspendido</span>
+                <input type="radio" name="status" value="pending" class="d-none">
+              </div>
+              <div class="status-option" data-status="inactive" onclick="selectStatus('inactive')">
+                <span class="status-color status-inactive"></span>
+                <span>Panne</span>
+                <input type="radio" name="status" value="inactive" class="d-none">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="saveStatus()">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MÓDULO: MODAL DE HISTORIAL
+       Muestra el historial de cambios de un servicio
+       ============================================ -->
+  <!-- ============================================
+       MÓDULO: MODAL DE HISTORIAL
+       Muestra el registro histórico de cambios realizados en un servicio
+       ============================================ -->
+  <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="historialModalLabel">Historial de Cambios</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <div class="d-flex align-items-center">
+              <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="exportarHistorialBtn">
+                <i class="fas fa-file-excel me-1"></i> Exportar a Excel
+              </button>
+            </div>
+            <div class="text-muted small">
+              Mostrando <span id="totalRegistros">0</span> registros
+            </div>
+          </div>
+          <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
+            <table class="table table-sm table-hover mb-0">
+              <thead class="table-light sticky-top">
+                <tr>
+                  <th class="text-nowrap">N° servicio</th>
+                  <th class="text-nowrap">Hora salida</th>
+                  <th class="text-nowrap">N° bus</th>
+                  <th class="text-nowrap">Conductor</th>
+                  <th class="text-nowrap">Diseño bus</th>
+                  <th class="text-nowrap">Estado</th>
+                  <th class="text-nowrap">Ruta</th>
+                  <th class="text-nowrap">Fecha cambio</th>
+                  <th class="text-nowrap">Usuario modifica</th>
+                  <th class="text-nowrap">Modificación</th>
+                </tr>
+              </thead>
+              <tbody id="historialTablaBody">
+                </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MÓDULO: MODAL DE EDICIÓN DE SERVICIO
+       Formulario completo para editar los detalles de un servicio
+       ============================================ -->
+  <!-- ============================================
+       MÓDULO: MODAL DE EDICIÓN DE SERVICIO
+       Permite editar toda la información detallada de un servicio
+       ============================================ -->
+  <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width:950px;">
+    <div class="modal-content" style="border-radius:12px; box-shadow:0 1px 8px rgba(0,0,0,0.08); border:none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <div class="modal-header" style="background:#fff; border-bottom:0; padding:10px 18px;">
+        <h5 class="modal-title fw-bold" id="editServiceModalLabel" style="color:#333; font-size:16px;">Editar servicios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" style="padding:0 14px 8px 14px; background:#fafafa;">
+        <form>
+          <!-- Detalles (N° de servicio, Servicio, Hora) -->
+<div class="border rounded p-3 mb-3" style="border-color:#ddd; background:#fff;">
+  <div class="row gx-3 gy-2 align-items-center">
+    <div class="col-4 col-md-2 d-flex align-items-center">
+      <label class="form-label mb-0 text-muted" style="font-size:12px; color:#666; width: auto; white-space: nowrap; margin-right: 0.5rem;">N° de servicio</label>
+      <input type="text" class="form-control form-control-sm miniinput" value="338728" readonly style="background:#f7f7fa;">
+    </div>
+    <div class="col-8 col-md-5 d-flex align-items-center" style="margin-left: 1.5rem;">
+      <label class="form-label mb-0 text-muted" style="font-size:12px; color:#666; width: auto; white-space: nowrap; margin-right: 0.5rem;">Servicio</label>
+      <input type="text" class="form-control form-control-sm miniinput" value="Stgo-Meil X Barros" readonly style="background:#f7f7fa;">
+    </div>
+    <div class="col-6 col-md-2 d-flex align-items-center"> 
+      <label class="form-label mb-0 text-muted" style="font-size:12px; color:#666; width: auto; white-space: nowrap; margin-right: 0.5rem;">Hora</label>
+      <input type="text" class="form-control form-control-sm miniinput" value="06:30 AM" readonly style="background:#f7f7fa;">
+    </div>
+  </div>
+</div>
+
+<!-- Sección Editar servicios -->
+<div class="border rounded p-3 mb-3" style="border-color:#ddd; background:#fff;">
+  <div class="fw-bold mb-3" style="font-size:15px; color:#222;">Editar servicios</div>
+  <div class="row gx-3 gy-2">
+    <!-- Izquierda -->
+    <div class="col-12 col-md-6">
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Ruta</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>Melipilla - Stgo x Terminal</option>
+            <option>Opción 2</option>
+          </select>
+        </div>
+      </div>
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Hora salida</label>
+        <div class="col-8">
+          <input type="time" class="form-control form-control-sm miniinput" value="07:40">
+        </div>
+      </div>
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Tipo de bus</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>2-Bus-46-Asientos</option>
+            <option>Opción 2</option>
+          </select>
+        </div>
+      </div>
+      <div class="row align-items-center mb-0">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Bus</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>CMYT-24</option>
+            <option>Opción 2</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derecha -->
+    <div class="col-12 col-md-6">
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Conductor 1</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>Conductor 1</option>
+          </select>
+        </div>
+      </div>
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Conductor 2</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>Conductor 2</option>
+          </select>
+        </div>
+      </div>
+      <div class="row align-items-center mb-2">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Auxiliar</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>Auxiliar</option>
+          </select>
+        </div>
+      </div>
+      <div class="row align-items-center mb-0">
+        <label class="col-4 col-form-label text-muted" style="font-size:12px;">Operado por</label>
+        <div class="col-8">
+          <select class="form-select form-select-sm miniinput">
+            <option selected>Conductor 1</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gastos del conductor y vehículo -->
+<div class="border rounded p-3 mb-3" style="border-color:#ddd; background:#fff;">
+  <div class="row gx-3 gy-2">
+    <!-- Gastos conductor -->
+    <div class="col-md-3">
+      <div class="fw-bold mb-2" style="font-size:13px; color:#222;">Gastos del conductor</div>
+      <div class="row align-items-center mb-1">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Viático</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0">
+        </div>
+      </div>
+      <div class="row align-items-center mb-1">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Avance</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0">
+        </div>
+      </div>
+      <div class="row align-items-center mb-0">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Total</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0" readonly style="background:#f7f7fa;">
+        </div>
+      </div>
+    </div>
+
+    <!-- N° registro conductor -->
+    <div class="col-md-3">
+      <div class="fw-bold mb-2" style="font-size:13px; color:#222;">N° de registro/marcas</div>
+      <div class="mb-1">
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+      <div class="mb-1">
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+      <div>
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+    </div>
+
+    <!-- Gastos vehículo -->
+    <div class="col-md-3">
+      <div class="fw-bold mb-2" style="font-size:13px; color:#222;">Gastos de vehículo</div>
+      <div class="row align-items-center mb-1">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Peaje</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0">
+        </div>
+      </div>
+      <div class="row align-items-center mb-1">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Losa</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0">
+        </div>
+      </div>
+      <div class="row align-items-center mb-1">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Asignar FAR</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0">
+        </div>
+      </div>
+      <div class="row align-items-center mb-0">
+        <label class="col-5 col-form-label text-muted" style="font-size:11px;">Total</label>
+        <div class="col-7">
+          <input class="form-control form-control-sm miniinput" value="0" readonly style="background:#f7f7fa;">
+        </div>
+      </div>
+    </div>
+
+    <!-- N° registro vehículo -->
+    <div class="col-md-3">
+      <div class="fw-bold mb-2" style="font-size:13px; color:#222;">N° de registro/marcas</div>
+      <div class="mb-1">
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+      <div class="mb-1">
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+      <div>
+        <input class="form-control form-control-sm miniinput" value="">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+          <!-- Montos de recogida e ingresos -->
+          <div class="border rounded p-3 mb-3" style="border-color:#ddd; background:#fff;">
+            <div class="row gx-3">
+              <!-- Montos recogida -->
+              <div class="col-md-6">
+                <div class="fw-bold mb-2" style="font-size:13px; color:#222;">Montos de recogida</div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Adelanto inicial</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Ingresos por reserva:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Ingresos por reserva CS:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="-" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Tarjeta de movilidad de Bus:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Efectivo de movilidad de Bus:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Ingresos adicionales:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Resumen de gastos:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0" readonly style="background:#f7f7fa;">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center" style="font-size:11px; color:#666;">
+                  <label class="mb-0">N° de documento:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="">
+                </div>
+              </div>
+
+              <!-- Ingresos -->
+              <div class="col-md-6">
+                <div class="fw-bold mb-2" style="font-size:13px; color:#222;">Ingresos</div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Otros gastos 1</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Otros gastos 2</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="-">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Otros gastos 3</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="-">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Otros gastos 4</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="-">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Monto de carga a pagar:</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="0">
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center" style="font-size:11px; color:#666;">
+                  <label class="mb-0">Total</label>
+                  <input class="form-control form-control-sm miniinput" style="max-width:120px;" value="" readonly style="background:#f7f7fa;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="row mb-3">
+            <div class="col-12">
+              <label class="form-label text-muted mb-1" style="font-size:12px; color:#666;">Observaciones</label>
+              <textarea class="form-control form-control-sm miniinput" rows="2" style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn" style="background:#fff;color:#ef4444; border-radius:8px;border:1px solid #ef4444;min-width:110px;font-size:13px;height:32px;">Guardar cambios</button>
+            <button type="button" class="btn" style="background:#ef4444;color:#fff;border-radius:8px;min-width:110px;font-size:13px;height:32px;">Actualizar</button>
+            <button type="button" class="btn" style="background:#ef4444;color:#fff;border-radius:8px;min-width:110px;font-size:13px;height:32px;">Imprimir recibo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .miniinput {
+    max-width: 280px !important;
+    min-width: 80px;
+    padding: 3px 10px !important;
+    font-size: 13px !important;
+    height: 28px !important;
+    margin-bottom: 4px;
+    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    background: #fff;
+  }
+  textarea.miniinput {
+    max-width: 100% !important;
+  }
+  @media (max-width: 900px) {
+    .miniinput {
+      max-width: 100% !important;
+      min-width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+  .modal-xl {
+    max-width: 950px;
+  }
+</style>
+
+
+  <!-- ============================================
+     MÓDULO: DEPENDENCIAS EXTERNAS
+     Incluye Bootstrap, jQuery y otros recursos necesarios
+     ============================================ -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <!-- ============================================
+     MÓDULO: SCRIPTS DE LA APLICACIÓN
+     Contiene toda la lógica de JavaScript para la funcionalidad de la interfaz
+     ============================================ -->
+<script>
+    // Toggle sidebar en móvil
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+
+    // Cerrar sidebar al hacer clic fuera
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuToggle = document.querySelector('.menu-toggle');
+      
+      if (sidebar && !sidebar.contains(event.target) && menuToggle && !menuToggle.contains(event.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    // Manejador del formulario de búsqueda
+    const searchForm = document.querySelector('.search-module'); // Más específico
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Búsqueda realizada');
+        });
+    }
+
+
+    // Toggle de vista de tarifas
+    document.addEventListener('DOMContentLoaded', function() {
+      const categoriasView = document.getElementById('categoriasView');
+      const asientosView = document.getElementById('asientosView');
+      const categoriasTabla = document.getElementById('categoriasTabla');
+      const asientosTabla = document.getElementById('asientosTabla');
+      
+      if (categoriasView && asientosView && categoriasTabla && asientosTabla) {
+        categoriasView.addEventListener('change', function() {
+          if (this.checked) {
+            categoriasTabla.style.display = 'block';
+            asientosTabla.style.display = 'none';
+          }
+        });
+        
+        asientosView.addEventListener('change', function() {
+          if (this.checked) {
+            categoriasTabla.style.display = 'none';
+            asientosTabla.style.display = 'block';
+          }
+        });
+      }
+    });
+
+    // Status Handler Functions
+    window.currentStatusElement = null;
+
+    function openStatusModal(element, service, variant, time) {
+      window.currentStatusElement = element;
+      
+      document.getElementById('servicioNombre').textContent = service;
+      document.getElementById('servicioVariante').textContent = variant;
+      document.getElementById('servicioHora').textContent = time;
+      
+      const currentStatus = element.getAttribute('data-status') || 'active';
+      selectStatus(currentStatus);
+      
+      const statusModalElement = document.getElementById('statusModal');
+      if (statusModalElement) {
+        const modal = new bootstrap.Modal(statusModalElement);
+        modal.show();
+      }
+    }
+
+    function selectStatus(status) {
+      document.querySelectorAll('.status-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      const selectedOption = document.querySelector(`.status-option[data-status="${status}"]`);
+      if (selectedOption) {
+        selectedOption.classList.add('selected');
+        const radio = selectedOption.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+      }
+    }
+
+    function saveStatus() {
+      if (!window.currentStatusElement) return;
+      
+      const selectedRadio = document.querySelector('input[name="status"]:checked');
+      if (!selectedRadio) return;
+      
+      const selectedStatus = selectedRadio.value;
+      
+      // Update the status indicator
+      window.currentStatusElement.className = 'status-indicator';
+      window.currentStatusElement.classList.add(`status-${selectedStatus}`);
+      window.currentStatusElement.setAttribute('data-status', selectedStatus);
+      
+      // Update tooltip
+      const statusText = getStatusText(selectedStatus);
+      window.currentStatusElement.setAttribute('title', statusText);
+      window.currentStatusElement.setAttribute('data-bs-original-title', statusText); // For Bootstrap 5
+      
+      // Reinitialize tooltip
+      const tooltipInstance = bootstrap.Tooltip.getInstance(window.currentStatusElement);
+      if (tooltipInstance) {
+        tooltipInstance.dispose();
+      }
+      new bootstrap.Tooltip(window.currentStatusElement);
+      
+      // Close modal
+      const statusModalElement = document.getElementById('statusModal');
+      if (statusModalElement) {
+          const modal = bootstrap.Modal.getInstance(statusModalElement);
+          if (modal) modal.hide();
+      }
+      
+      console.log('Status updated:', selectedStatus);
+    }
+
+    function getStatusText(status) {
+      const statusMap = {
+        'active': 'Abierto',
+        'alert': 'Cerrado',
+        'pending': 'Suspendido',
+        'inactive': 'Panne'
+      };
+      return statusMap[status] || 'Desconocido';
+    }
+
+    /* ========== INICIALIZACIÓN DE INDICADORES DE ESTADO ========== */
+    // Configura los manejadores de eventos para los indicadores de estado
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click handlers to all status indicators
+      document.querySelectorAll('.status-indicator').forEach(indicator => {
+        indicator.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const row = this.closest('tr');
+          if (row && row.cells.length > 5) { // Check if row and cells exist
+            const service = row.cells[2].textContent;
+            const variant = row.cells[3].textContent;
+            const time = row.cells[5].textContent;
+            openStatusModal(this, service, variant, time);
+          }
+        });
+        
+        // Initialize tooltip
+        if (bootstrap && bootstrap.Tooltip) { // Check if Bootstrap Tooltip is available
+            new bootstrap.Tooltip(indicator);
+        }
+      });
+      
+      // Initialize tooltips for other elements if any
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(tooltipTriggerEl => {
+        if (bootstrap && bootstrap.Tooltip) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        }
+        return null;
+      });
+    });
+
+    </script>
+    
+    <!-- Incluir el manejador de edición de servicios -->
+    <script src="edit-service-handler.js"></script>
+    
+    <script>
+    // History Handler
+    document.addEventListener('DOMContentLoaded', function() {
+      const historialEjemplo = [
+        {
+          nroServicio: '3376456',
+          horaSalida: '11/06/2025 5:45',
+          nroBus: '35 - KBSS-28',
+          conductor: 'Juan Alvarez-CM629',
+          disenoBus: 'Bus 45 asientos',
+          estado: 'Cerrado',
+          ruta: '',
+          fechaCambio: '11/06/2025',
+          usuario: 'Jatenas',
+          modificacion: 'Conductor 1 actualizado'
+        },
+        {
+          nroServicio: '3376456',
+          horaSalida: '11/06/2025 5:45',
+          nroBus: '35 - KBSS-28',
+          conductor: 'Juan Alvarez-CM629',
+          disenoBus: 'Bus 45 asientos',
+          estado: 'Cerrado',
+          ruta: '',
+          fechaCambio: '11/06/2025',
+          usuario: 'Cpoblete',
+          modificacion: 'Conductor 2 actualizado'
+        }
+      ];
+      
+      // Handler for history button
+      document.addEventListener('click', function(e) {
+        const historyBtn = e.target.closest('.btn-history');
+        if (historyBtn) {
+          e.preventDefault();
+          const row = historyBtn.closest('tr');
+          const servicio = {
+            numero: row && row.cells[2] ? row.cells[2].textContent.trim() : 'N/A'
+          };
+          
+          // Update modal title
+          const historialModalLabel = document.getElementById('historialModalLabel');
+          if (historialModalLabel) {
+            historialModalLabel.textContent = `Historial de Cambios - ${servicio.numero}`;
+          }
+          
+          // Clear and populate table
+          const tbody = document.getElementById('historialTablaBody');
+          if (tbody) {
+            tbody.innerHTML = ''; // Clear previous entries
+            
+            historialEjemplo.forEach(item => {
+              const tr = document.createElement('tr');
+              const modificacionClass = item.modificacion ? 'text-primary fw-bold' : '';
+              
+              tr.innerHTML = `
+                <td class="text-nowrap">${item.nroServicio}</td>
+                <td class="text-nowrap">${item.horaSalida}</td>
+                <td class="text-nowrap">${item.nroBus}</td>
+                <td class="text-nowrap">${item.conductor}</td>
+                <td class="text-nowrap">${item.disenoBus}</td>
+                <td class="text-nowrap">${item.estado}</td>
+                <td class="text-nowrap">${item.ruta || ''}</td>
+                <td class="text-nowrap">${item.fechaCambio}</td>
+                <td class="text-nowrap">${item.usuario}</td>
+                <td class="text-nowrap ${modificacionClass}">${item.modificacion}</td>
+              `;
+              
+              tbody.appendChild(tr);
+            });
+          }
+          
+          const totalRegistrosSpan = document.getElementById('totalRegistros');
+          if (totalRegistrosSpan) {
+            totalRegistrosSpan.textContent = historialEjemplo.length;
+          }
+          
+          // Export button handler
+          const exportarHistorialBtn = document.getElementById('exportarHistorialBtn');
+          if (exportarHistorialBtn) {
+            exportarHistorialBtn.onclick = function() {
+              alert('Exportando historial a Excel...');
+            };
+          }
+          
+          // Show modal
+          const historialModalElement = document.getElementById('historialModal');
+          if (historialModalElement && bootstrap && bootstrap.Modal) {
+            const modal = new bootstrap.Modal(historialModalElement);
+            modal.show();
+          }
+        }
+      });
+    });
+  </script>
+  
+  <!-- Modal de Edición de Servicio -->
+  <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editServiceModalLabel">Editar Servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <!-- El contenido del formulario de edición se cargará aquí dinámicamente -->
+          <div class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando formulario de edición...</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarCambiosBtn">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Historial -->
+  <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="historialModalLabel">Historial de Cambios</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>N° Servicio</th>
+                  <th>Hora Salida</th>
+                  <th>Bus</th>
+                  <th>Conductor</th>
+                  <th>Diseño</th>
+                  <th>Estado</th>
+                  <th>Ruta</th>
+                  <th>Fecha Cambio</th>
+                  <th>Usuario</th>
+                  <th>Modificación</th>
+                </tr>
+              </thead>
+              <tbody id="historialTablaBody">
+                <!-- Los registros de historial se cargarán aquí dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="me-auto">
+            <span>Total de registros: <span id="totalRegistros">0</span></span>
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="exportarHistorialBtn">
+            <i class="bi bi-download me-1"></i> Exportar a Excel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts personalizados -->
+  <script src="edit-service-handler.js"></script>
+  <script src="historial-handler.js"></script>
+  <script>
+    // Inicializar tooltips de Bootstrap
+    document.addEventListener('DOMContentLoaded', function() {
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+      
+      console.log('Aplicación inicializada correctamente');
+    });
+  </script>
+  
+  <script>
+  // Solución definitiva para el cierre de modales
+  document.addEventListener('DOMContentLoaded', function() {
+    // Función para limpiar completamente todos los modales y backdrops
+    function cleanUpModals() {
+      // Ocultar todos los modales visibles
+      document.querySelectorAll('.modal.show').forEach(modal => {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        modal.removeAttribute('aria-modal');
+      });
+      
+      // Eliminar todos los backdrops
+      document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.parentNode.removeChild(backdrop);
+      });
+      
+      // Restablecer el body
+      document.body.classList.remove('modal-open');
+      document.body.style.paddingRight = '';
+      document.body.style.overflow = '';
+    }
+    
+    // Función para cerrar un modal específico
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      
+      // Intentar usar Bootstrap primero
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) {
+          // Usar el método dispose para limpiar correctamente
+          bsModal.hide();
+          // Forzar limpieza después de la animación
+          setTimeout(cleanUpModals, 300);
+          return;
+        }
+      }
+      
+      // Si no hay Bootstrap o falla, limpiar manualmente
+      cleanUpModals();
+    }
+    
+    // Manejador global para todos los botones de cierre
+    document.addEventListener('click', function(e) {
+      // Botón de cierre (X)
+      const closeButton = e.target.closest('[data-bs-dismiss="modal"]');
+      if (closeButton) {
+        e.preventDefault();
+        const modal = closeButton.closest('.modal');
+        if (modal && modal.id) {
+          closeModal(modal.id);
+        }
+        return;
+      }
+      
+      // Botón de cerrar en el footer
+      const closeBtn = e.target.closest('.modal-footer .btn-secondary');
+      if (closeBtn) {
+        e.preventDefault();
+        const modal = closeBtn.closest('.modal');
+        if (modal && modal.id) {
+          closeModal(modal.id);
+        }
+        return;
+      }
+      
+      // Clic fuera del contenido del modal (en el backdrop)
+      if (e.target.classList.contains('modal')) {
+        e.preventDefault();
+        closeModal(e.target.id);
+      }
+    });
+    
+    // Limpiar modales cuando se presiona ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        cleanUpModals();
+      }
+    });
+    
+    // Forzar limpieza al cargar la página
+    window.addEventListener('load', cleanUpModals);
+  });
+  </script>
+  
+  <script>
+  // Función para formatear la fecha en español
+  function formatDate(date) {
+    const options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+    
+    // Configurar el idioma español
+    const formatter = new Intl.DateTimeFormat('es-ES', options);
+    let formatted = formatter.format(date);
+    
+    // Capitalizar la primera letra del día y mes
+    formatted = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+    
+    return formatted;
+  }
+  
+  // Función para actualizar la fecha y hora cada segundo
+  function updateDateTime() {
+    const now = new Date();
+    const dateTimeElement = document.getElementById('currentDateTime');
+    if (dateTimeElement) {
+      dateTimeElement.textContent = formatDate(now);
+    }
+  }
+  
+  // Inicializar el gráfico de pasajeros
+  function initChart() {
+    const ctx = document.getElementById('pasajerosChart');
+    if (!ctx) return;
+    
+    // Datos de ejemplo para el gráfico
+    const chartData = {
+      diario: {
+        labels: ['6', '7', '8', '9', '10', '11', '12', '13', '14', '15'],
+        values: [80, 120, 150, 180, 200, 220, 210, 180, 160, 140],
+        title: 'Pasajeros transportados por hora'
+      },
+      semanal: {
+        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        values: [1200, 1500, 1400, 1600, 1800, 2000, 1900],
+        title: 'Pasajeros transportados por día (semana actual)'
+      },
+      mensual: {
+        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+        values: [6500, 7200, 6800, 7000],
+        title: 'Pasajeros transportados por semana (mes actual)'
+      }
+    };
+    
+    // Configuración común para el gráfico
+    const chartConfig = {
+      type: 'line',
+      data: {
+        labels: chartData.diario.labels,
+        datasets: [{
+          label: 'Pasajeros',
+          data: chartData.diario.values,
+          borderColor: '#4e73df',
+          backgroundColor: 'rgba(78, 115, 223, 0.05)',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#4e73df',
+          pointBorderColor: '#fff',
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#4e73df',
+          pointHoverBorderColor: '#fff',
+          pointHitRadius: 10,
+          pointBorderWidth: 2,
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        layout: {
+          padding: 10
+        },
+        scales: {
+          x: {
+            grid: {
+              display: true,
+              drawBorder: false,
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              font: {
+                size: 11
+              },
+              maxRotation: 0,
+              autoSkip: true,
+              maxTicksLimit: 10
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)',
+              drawBorder: false
+            },
+            ticks: {
+              font: {
+                size: 11
+              },
+              callback: function(value) {
+                return value;
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: {
+              size: 12
+            },
+            bodyFont: {
+              size: 12
+            },
+            callbacks: {
+              label: function(context) {
+                return 'Pasajeros: ' + context.parsed.y;
+              }
+            }
+          }
+        }
+      }
+    };
+    
+    // Crear el gráfico
+    const chart = new Chart(ctx, chartConfig);
+    
+    // Función para actualizar el gráfico según el período seleccionado
+    function updateChart(period) {
+      const data = chartData[period];
+      if (!data) return;
+      
+      // Actualizar título
+      document.querySelector('.chart-module h3').textContent = data.title;
+      
+      // Actualizar datos del gráfico
+      chart.data.labels = data.labels;
+      chart.data.datasets[0].data = data.values;
+      chart.update();
+    }
+    
+    // Manejadores para los botones de radio
+    document.querySelectorAll('input[name="periodoView"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.checked) {
+          const period = this.id.replace('View', '');
+          updateChart(period);
+        }
+      });
+    });
+    
+    return chart;
+  }
+  
+  // Iniciar todo cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', function() {
+    // Iniciar el reloj
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    
+    // Iniciar el gráfico
+    initChart();
+  });
+    
+    // Iniciar el reloj cuando el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+      // Actualizar inmediatamente
+      updateDateTime();
+      // Actualizar cada segundo
+      setInterval(updateDateTime, 1000);
+    });
+    
+  </script>
+</body>
+</html>
