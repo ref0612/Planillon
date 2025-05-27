@@ -392,7 +392,7 @@
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 16px;
-    color: #1d1d1f;
+    color: #86868b;
   }
 
   .chart-placeholder {
@@ -528,6 +528,7 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    color:#86868b;
   }
 
   .detail-header {
@@ -677,8 +678,8 @@
   
   /* Estilos para modales personalizados */
   .modal-header {
-    background: #1d1d1f;
-    color: white;
+    background: #86868b;
+    color: black;
     border-bottom: 1px solid #333;
   }
   
@@ -1490,53 +1491,236 @@
        MÓDULO: MODAL DE HISTORIAL
        Muestra el registro histórico de cambios realizados en un servicio
        ============================================ -->
-  <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="historialModalLabel">Historial de Cambios</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+<div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content" style="background: #fff;">
+      <div class="modal-header border-bottom pb-2" style="background: #f8f9fa;">
+        <h6 class="modal-title fw-normal" id="historialModalLabel">Historial del servicio</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
+          <table class="table table-sm mb-0" style="border-collapse: separate; border-spacing: 0;">
+            <thead class="table-light sticky-top" style="background: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+              <tr style="font-size: 0.8rem;">
+                <th class="text-nowrap text-center fw-normal" style="width: 10%; padding: 8px 4px;">N° servicio</th>
+                <th class="text-nowrap text-center fw-normal" style="width: 10%; padding: 8px 4px;">Hora salida</th>
+                <th class="text-nowrap text-center fw-normal" style="width: 10%; padding: 8px 4px;">N° bus</th>
+                <th class="text-nowrap fw-normal" style="width: 15%; padding: 8px 4px;">Conductor</th>
+                <th class="text-nowrap fw-normal" style="width: 12%; padding: 8px 4px;">Diseño bus</th>
+                <th class="text-nowrap text-center fw-normal" style="width: 8%; padding: 8px 4px;">Estado</th>
+                <th class="text-nowrap text-center fw-normal" style="width: 8%; padding: 8px 4px;">Ruta</th>
+                <th class="text-nowrap text-center fw-normal" style="width: 10%; padding: 8px 4px;">Fecha cambio</th>
+                <th class="text-nowrap fw-normal" style="width: 12%; padding: 8px 4px;">Usuario modifica</th>
+                <th class="text-nowrap fw-normal" style="width: 15%; padding: 8px 4px;">Modificación</th>
+              </tr>
+            </thead>
+            <tbody id="historialTablaBody" style="font-size: 0.75rem;">
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - KBSS-28</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Jatenas</td>
+                <td style="padding: 4px; color: #0066cc;">Conductor 1 actualizado</td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - KBSS-28</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Cpoblete</td>
+                <td style="padding: 4px; color: #0066cc;">Conductor 2 actualizado</td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - KBSS-28</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Ctapia</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - KBSS-28</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Llorres</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - KBSS-28</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Tlopez</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr class="table-danger">
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">35 - RBSS-21</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Adiaz</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">36 - RBSS-21</td>
+                <td style="padding: 4px;">Juan Alvarez-CM629</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Bsoto</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">36 - RBSS-21</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;">Cerrado</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Acontreras</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">36 - RBSS-21</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Ctapia</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">36 - RBSS-21</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Llorres</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">38 - SVSS-11</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Tlopez</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">38 - SVSS-11</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Adiaz</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+              <tr>
+                <td class="text-center" style="padding: 4px;">3376456</td>
+                <td class="text-center" style="padding: 4px;">11/06/2025 5:45</td>
+                <td class="text-center" style="padding: 4px;">38 - SVSS-11</td>
+                <td style="padding: 4px;">Eduardo Rios-CM630</td>
+                <td style="padding: 4px;">Bus 45 asientos</td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;"></td>
+                <td class="text-center" style="padding: 4px;">11/06/2025</td>
+                <td style="padding: 4px;">Bsoto</td>
+                <td style="padding: 4px;"></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="modal-body p-0">
-          <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-            <div class="d-flex align-items-center">
-              <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="exportarHistorialBtn">
-                <i class="fas fa-file-excel me-1"></i> Exportar a Excel
-              </button>
-            </div>
-            <div class="text-muted small">
-              Mostrando <span id="totalRegistros">0</span> registros
-            </div>
-          </div>
-          <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
-            <table class="table table-sm table-hover mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="text-nowrap">N° servicio</th>
-                  <th class="text-nowrap">Hora salida</th>
-                  <th class="text-nowrap">N° bus</th>
-                  <th class="text-nowrap">Conductor</th>
-                  <th class="text-nowrap">Diseño bus</th>
-                  <th class="text-nowrap">Estado</th>
-                  <th class="text-nowrap">Ruta</th>
-                  <th class="text-nowrap">Fecha cambio</th>
-                  <th class="text-nowrap">Usuario modifica</th>
-                  <th class="text-nowrap">Modificación</th>
-                </tr>
-              </thead>
-              <tbody id="historialTablaBody">
-                </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
-            <i class="fas fa-times me-1"></i> Cerrar
-          </button>
-        </div>
+      </div>
+      <div class="modal-footer border-0 justify-center">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="exportarHistorialBtn">
+          <i class="fas fa-file-excel me-1"></i> Exportar a Excel
+        </button>
       </div>
     </div>
   </div>
+</div>
+
+<style>
+  /* Hover para las filas */
+  #historialTablaBody tr:hover:not(.table-danger) {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+  
+  /* Fila resaltada en rojo */
+  #historialTablaBody tr.table-danger {
+    background-color: #f8d7da !important;
+  }
+  
+  /* Scroll personalizado */
+  .table-responsive::-webkit-scrollbar {
+    width: 8px;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  
+  /* Centrar el botón del footer */
+  .justify-center {
+    justify-content: center !important;
+  }
+  
+  /* Texto azul para modificaciones */
+  .text-modification {
+    color: #0066cc !important;
+  }
+</style>
+
+
 
   <!-- ============================================
        MÓDULO: MODAL DE EDICIÓN DE SERVICIO
