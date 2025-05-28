@@ -100,7 +100,7 @@ body, html {
 /* ========== HEADER PRINCIPAL ========== */
 .main-header {
   background: white;
-  padding: 16px 24px;
+  padding: 21px 24px;
   border-bottom: 1px solid #e5e5e7;
   display: flex;
   align-items: center;
