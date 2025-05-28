@@ -168,60 +168,106 @@ class TarifaSummary {
     }
    
     /**
-     * Configura los eventos de las pestañas
+     * Configura los eventos de las pestañas - VERSIÓN CORREGIDA
      */
     bindTabButtons() {
-        // Eliminar cualquier manejador de eventos existente primero
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-        });
-
-        // Agregar los nuevos manejadores de eventos
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleTabClick(btn);
+        // ✅ Buscar los radio buttons correctos por name y id
+        const categoriasView = document.getElementById('categoriasView');
+        const asientosView = document.getElementById('asientosView');
+        
+        if (categoriasView) {
+            categoriasView.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    console.log('Cambiando a vista de categorías');
+                    this.switchView('categorias');
+                    this.updateActiveTab('categoriasView');
+                }
             });
-        });
+        }
+        
+        if (asientosView) {
+            asientosView.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    console.log('Cambiando a vista de asientos');
+                    this.switchView('asientos');
+                    this.updateActiveTab('asientosView');
+                }
+            });
+        }
+        
+        // ✅ También escuchar clics en las labels
+        const categoriasLabel = document.querySelector('label[for="categoriasView"]');
+        const asientosLabel = document.querySelector('label[for="asientosView"]');
+        
+        if (categoriasLabel) {
+            categoriasLabel.addEventListener('click', () => {
+                setTimeout(() => this.switchView('categorias'), 50);
+            });
+        }
+        
+        if (asientosLabel) {
+            asientosLabel.addEventListener('click', () => {
+                setTimeout(() => this.switchView('asientos'), 50);
+            });
+        }
+        
+        console.log('Event listeners de pestañas configurados correctamente');
     }
 
     /**
-     * Maneja el click en pestañas
-     * @param {HTMLElement} button - La pestaña clickeada
+     * Actualiza la clase activa de las pestañas
      */
-    handleTabClick(button) {
-        const tabName = button.dataset.tab || button.textContent.toLowerCase();
-        
-        // Remover clase activa de todas las pestañas
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
+    updateActiveTab(activeId) {
+        // Actualizar estilos de las labels
+        const allLabels = document.querySelectorAll('label[for$="View"]');
+        allLabels.forEach(label => {
+            label.classList.remove('active');
         });
         
-        // Activar la pestaña clickeada
-        button.classList.add('active');
-        
-        console.log('Cambiando a pestaña:', tabName);
-        
-        // Cambiar vista según la pestaña
-        this.switchView(tabName);
+        const activeLabel = document.querySelector(`label[for="${activeId}"]`);
+        if (activeLabel) {
+            activeLabel.classList.add('active');
+        }
     }
 
     /**
-     * Cambia la vista según la pestaña seleccionada
+     * Cambia la vista según la pestaña seleccionada - VERSIÓN MEJORADA
      * @param {string} tabName - Nombre de la pestaña
      */
     switchView(tabName) {
+        console.log('Ejecutando switchView para:', tabName);
+        
         const categoriasTabla = document.getElementById('categoriasTabla');
         const asientosTabla = document.getElementById('asientosTabla');
         
-        if (tabName === 'categorias' || tabName === 'categorías') {
-            if (categoriasTabla) categoriasTabla.style.display = 'block';
-            if (asientosTabla) asientosTabla.style.display = 'none';
-        } else if (tabName === 'asientos') {
-            if (categoriasTabla) categoriasTabla.style.display = 'none';
-            if (asientosTabla) asientosTabla.style.display = 'block';
+        if (!categoriasTabla || !asientosTabla) {
+            console.error('No se encontraron las tablas de tarifas');
+            return;
         }
+        
+        if (tabName === 'categorias' || tabName === 'categorías') {
+            console.log('Mostrando tabla de categorías');
+            categoriasTabla.style.display = 'block';
+            asientosTabla.style.display = 'none';
+            
+            // ✅ Verificar integridad después del cambio
+            setTimeout(() => {
+                this.checkAndFixCorruption();
+            }, 100);
+            
+        } else if (tabName === 'asientos') {
+            console.log('Mostrando tabla de asientos');
+            categoriasTabla.style.display = 'none';
+            asientosTabla.style.display = 'block';
+            
+            // ✅ Verificar integridad después del cambio
+            setTimeout(() => {
+                this.checkAndFixCorruption();
+            }, 100);
+        }
+        
+        // ✅ Forzar re-protección de las tablas
+        this.protectTariffTables();
     }
 
     /**
@@ -236,6 +282,11 @@ class TarifaSummary {
                 firstTab.classList.add('active');
             }
         }
+        
+        // Asegurar que la vista de categorías esté visible por defecto
+        setTimeout(() => {
+            this.switchView('categorias');
+        }, 100);
     }
 
     /**
@@ -442,6 +493,67 @@ document.querySelectorAll = function(selector) {
     return result;
 };
 
+// ========== FUNCIONES DE DEBUGGING ==========
+// Función para debuggear el estado de las pestañas
+window.debugTarifaTabs = function() {
+    console.log('=== DEBUG TARIFA TABS ===');
+    
+    // Verificar elementos
+    const categoriasView = document.getElementById('categoriasView');
+    const asientosView = document.getElementById('asientosView');
+    const categoriasTabla = document.getElementById('categoriasTabla');
+    const asientosTabla = document.getElementById('asientosTabla');
+    
+    console.log('Elementos encontrados:');
+    console.log('- categoriasView:', categoriasView ? '✅' : '❌');
+    console.log('- asientosView:', asientosView ? '✅' : '❌');
+    console.log('- categoriasTabla:', categoriasTabla ? '✅' : '❌');
+    console.log('- asientosTabla:', asientosTabla ? '✅' : '❌');
+    
+    // Verificar estado actual
+    if (categoriasView && asientosView) {
+        console.log('Estado de radio buttons:');
+        console.log('- Categorías checked:', categoriasView.checked);
+        console.log('- Asientos checked:', asientosView.checked);
+    }
+    
+    // Verificar visibilidad de tablas
+    if (categoriasTabla && asientosTabla) {
+        console.log('Visibilidad de tablas:');
+        console.log('- Categorías display:', categoriasTabla.style.display || 'default');
+        console.log('- Asientos display:', asientosTabla.style.display || 'default');
+    }
+    
+    // Verificar instancia de TarifaSummary
+    console.log('TarifaSummary instance:', window.tarifaSummary ? '✅' : '❌');
+};
+
+// Función para forzar cambio de pestaña
+window.forceSwitchTab = function(tabName) {
+    console.log(`Forzando cambio a: ${tabName}`);
+    if (window.tarifaSummary) {
+        window.tarifaSummary.switchView(tabName);
+    } else {
+        console.error('TarifaSummary no está inicializado');
+    }
+};
+
+// Función para verificar corrupción
+window.checkTariffCorruption = function() {
+    const corruptedRows = document.querySelectorAll('.tariff-table tbody tr td .action-buttons');
+    console.log(`Filas corruptas encontradas: ${corruptedRows.length}`);
+    
+    if (corruptedRows.length > 0) {
+        console.log('Elementos corruptos:', corruptedRows);
+        if (window.tarifaSummary) {
+            window.tarifaSummary.restoreTariffTables();
+            console.log('Tablas restauradas');
+        }
+    } else {
+        console.log('✅ No se encontró corrupción en las tablas');
+    }
+};
+
 // Función global para verificar estado
 window.checkTariffTables = function() {
     if (window.tarifaSummary) {
@@ -458,6 +570,14 @@ window.restoreTariffTables = function() {
     }
     return false;
 };
+
+// Auto-ejecutar debug al cargar
+setTimeout(() => {
+    if (document.querySelector('.tariff-module')) {
+        console.log('🔍 Ejecutando debug automático de pestañas de tarifas...');
+        window.debugTarifaTabs();
+    }
+}, 2000);
 
 // Exportar para uso en otros módulos si es necesario
 if (typeof module !== 'undefined' && module.exports) {

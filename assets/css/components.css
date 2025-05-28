@@ -23,7 +23,7 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #f5f5f7 100%);
   border: 1px solid #e5e5e7;
   border-radius: 8px;
-  padding: 10px 8px;
+  padding: 13px 15px;
   flex: 3;
   min-width: 200px;
   max-width: 650px; /* Aumentado para acomodar 5 tarjetas */
