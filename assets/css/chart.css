@@ -1,0 +1,215 @@
+/* ========== ESTILOS PARA EL MÓDULO DE GRÁFICO ========== */
+/* Archivo: assets/css/chart.css */
+
+.chart-module {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e5e7;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+
+.chart-module h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #86868b;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e5e7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#occupancyChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Eliminar el placeholder anterior si existe */
+.chart-placeholder {
+  display: none;
+}
+
+/* ========== BOTONES DE VISTA DEL GRÁFICO ========== */
+.chart-module .btn-group {
+  display: inline-flex;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chart-module .btn-group .btn {
+  color: #495057;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  font-size: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 0;
+}
+
+.chart-module .btn-group .btn:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.chart-module .btn-group .btn:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.chart-module .btn-group .btn-check:checked + .btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border-color: #dc2626;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chart-module .btn-group .btn:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+}
+
+.chart-module .btn-check {
+  position: absolute;
+  clip: rect(0,0,0,0);
+  pointer-events: none;
+}
+
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+    padding: 15px;
+  }
+  
+  .chart-module h3 {
+    font-size: 14px;
+  }
+  
+  .chart-module .btn-group .btn {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .chart-module {
+    padding: 12px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .chart-container {
+    height: 220px;
+    padding: 10px;
+  }
+  
+  .chart-module .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+  
+  .chart-module .btn-group {
+    width: 100%;
+  }
+  
+  .chart-module .btn-group .btn {
+    flex: 1;
+    font-size: 9px;
+    padding: 6px 4px;
+  }
+  
+  .chart-module {
+    padding: 8px;
+  }
+  
+  .chart-module h3 {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 320px) {
+  .chart-container {
+    height: 200px;
+    padding: 8px;
+  }
+  
+  .chart-module .btn-group .btn {
+    font-size: 8px;
+    padding: 4px 2px;
+  }
+}
+
+/* ========== ANIMACIONES ========== */
+.chart-container {
+  transition: all 0.3s ease;
+}
+
+.chart-module .btn-group .btn {
+  transition: all 0.2s ease;
+}
+
+.chart-module .btn-group .btn:hover:not(.btn-check:checked + .btn) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ========== ESTADOS DE CARGA ========== */
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #86868b;
+  font-size: 14px;
+}
+
+.chart-loading::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e5e7;
+  border-top-color: #ef4444;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== ERROR STATES ========== */
+.chart-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #ef4444;
+  font-size: 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+.chart-error i {
+  margin-right: 8px;
+  font-size: 16px;
+}
