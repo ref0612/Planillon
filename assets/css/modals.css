@@ -1,0 +1,594 @@
+/* ========== ESTILOS GENERALES DE MODALES ========== */
+.modal-header {
+  background: #86868b;
+  color: black;
+  border-bottom: 1px solid #333;
+}
+
+.btn-close-white {
+  filter: invert(1);
+}
+
+.modal-footer {
+  background-color: #f5f5f7;
+  border-top: 1px solid #e5e5e7;
+}
+
+/* ========== MODAL DE ESTADO ========== */
+#statusModal .modal-header {
+  background-color: #1f2937;
+  color: white;
+  border-bottom: none;
+  padding: 1.5rem 2rem;
+}
+
+#statusModal .modal-title {
+  font-weight: 600;
+}
+
+#statusModal .modal-body {
+  padding: 25px;
+}
+
+#statusModal .modal-footer {
+  border-top: none;
+  padding: 15px 25px 25px;
+  justify-content: space-between;
+}
+
+#statusModal .btn {
+  padding: 8px 20px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+#statusModal .btn-secondary {
+  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+#statusModal .btn-danger {
+  background-color: #ef4444;
+  border-color: #ef4444;
+}
+
+/* Información del servicio en modal */
+.service-info {
+  background-color: #f9fafb;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.service-info p {
+  margin: 5px 0;
+  color: #4b5563;
+}
+
+.service-info strong {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Opciones de estado */
+.status-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #e5e7eb;
+}
+
+.status-option:hover {
+  background-color: #f3f4f6;
+  transform: translateX(2px);
+}
+
+.status-option.selected {
+  background-color: #f0fdf4;
+  border-color: #10b981;
+  box-shadow: 0 0 0 1px #10b981;
+}
+
+.status-option .status-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  margin-right: 12px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.status-option span {
+  font-size: 0.95rem;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.status-option.selected span {
+  color: #065f46;
+}
+
+/* ========== MODAL DE HISTORIAL ========== */
+#historialModal .modal-content {
+  background: #fff;
+}
+
+#historialModal .modal-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+#historialModal .table-responsive {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+#historialModal .table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#historialModal .table thead {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+#historialModal .table tr {
+  font-size: 0.8rem;
+}
+
+#historialModal .table th {
+  width: auto;
+  padding: 8px 4px;
+  font-weight: normal;
+}
+
+#historialModal .table td {
+  padding: 4px;
+}
+
+#historialModal .table tbody tr:hover:not(.table-danger) {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+#historialModal .table tbody tr.table-danger {
+  background-color: #f8d7da !important;
+}
+
+#historialModal .table-responsive::-webkit-scrollbar {
+  width: 8px;
+}
+
+#historialModal .table-responsive::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+#historialModal .table-responsive::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+#historialModal .justify-center {
+  justify-content: center !important;
+}
+
+#historialModal .text-modification {
+  color: #0066cc !important;
+}
+
+/* ========== MODAL DE EDICIÓN DE SERVICIO ========== */
+#editServiceModal .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+  border: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#editServiceModal .modal-header {
+  background: #fff;
+  border-bottom: 0;
+  padding: 10px 18px;
+}
+
+#editServiceModal .modal-title {
+  color: #333;
+  font-size: 16px;
+}
+
+#editServiceModal .modal-body {
+  padding: 0 14px 8px 14px;
+  background: #fafafa;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #86868b;
+  margin-bottom: 4px;
+}
+
+.form-control, .form-select {
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #d4a574;
+  box-shadow: 0 0 0 0.25rem rgba(212, 165, 116, 0.25);
+}
+
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #f5f5f7;
+  border-bottom: 1px solid #e5e5e7;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+/* Inputs pequeños para modal de edición */
+.miniinput {
+  max-width: 280px !important;
+  min-width: 80px;
+  padding: 3px 10px !important;
+  font-size: 13px !important;
+  height: 28px !important;
+  margin-bottom: 4px;
+  color: #333;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  background: #fff;
+}
+
+textarea.miniinput {
+  max-width: 100% !important;
+}
+
+/* ========== MODAL DE RESUMEN DE SERVICIO ========== */
+#serviceSummaryModal .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#serviceSummaryModal .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 16px;
+}
+
+#serviceSummaryModal .modal-title {
+  font-size: 15px;
+  color: #333;
+}
+
+#serviceSummaryModal .modal-body {
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+#serviceSummaryModal .card {
+  border: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#serviceSummaryModal .card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 8px 12px;
+}
+
+#serviceSummaryModal .card-body {
+  padding: 12px;
+}
+
+#serviceSummaryModal .badge {
+  font-size: 10px;
+  min-width: 80px;
+}
+
+#serviceSummaryModal .input-group-text {
+  font-size: 10px;
+  background-color: #f8f9fa;
+}
+
+#serviceSummaryModal .form-control-sm {
+  font-size: 11px;
+  height: 24px;
+}
+
+/* ========== BOTONES DE MODAL ========== */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5c636a;
+  border-color: #565e64;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+}
+
+.btn-close {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.25em 0.25em;
+  color: #000;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='m.235 1.813 5.25 5.25-5.25 5.25a.5.5 0 0 0 .708.708L6.5 7.764l5.25 5.25a.5.5 0 0 0 .708-.708L7.207 7.057l5.25-5.25a.5.5 0 0 0-.708-.708L6.5 6.35 1.25 1.101a.5.5 0 0 0-.708 0l-.306.308a.5.5 0 0 0 0 .708z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: 0.5;
+}
+/* ========== ESTILOS ADICIONALES PARA MODAL DE RESUMEN ========== */
+/* Agregar estos estilos al archivo assets/css/modals.css */
+
+/* ========== MODAL DE RESUMEN DE SERVICIO ========== */
+#serviceSummaryModal .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#serviceSummaryModal .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 16px;
+}
+
+#serviceSummaryModal .modal-title {
+  font-size: 15px;
+  color: #333;
+}
+
+#serviceSummaryModal .modal-body {
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+#serviceSummaryModal .card {
+  border: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#serviceSummaryModal .card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 8px 12px;
+}
+
+#serviceSummaryModal .card-body {
+  padding: 12px;
+}
+
+#serviceSummaryModal .badge {
+  font-size: 10px;
+  min-width: 80px;
+  padding: 4px 8px;
+}
+
+#serviceSummaryModal .input-group-text {
+  font-size: 10px;
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+#serviceSummaryModal .form-control-sm {
+  font-size: 11px;
+  height: 24px;
+  border-color: #dee2e6;
+}
+
+#serviceSummaryModal .form-control-sm:focus {
+  border-color: #d4a574;
+  box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.25);
+}
+
+#serviceSummaryModal .form-control-sm[readonly] {
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+}
+
+/* Botones del modal de resumen */
+#serviceSummaryModal .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+
+#serviceSummaryModal .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilo para campos de cálculo */
+.calculation-field {
+  background-color: #fff3cd !important;
+  border-color: #ffeaa7 !important;
+}
+
+.calculation-field:focus {
+  background-color: #fff !important;
+  border-color: #d4a574 !important;
+}
+
+/* Estilo para totales */
+.total-field {
+  background-color: #f1f8ff !important;
+  border-color: #b8daff !important;
+  font-weight: bold !important;
+  color: #004085 !important;
+}
+
+/* Secciones de gastos */
+.gastos-conductor .card-header {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%) !important;
+}
+
+.gastos-vehiculo .card-header {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%) !important;
+}
+
+/* Animaciones para campos que cambian */
+.field-updated {
+  animation: fieldHighlight 0.5s ease-in-out;
+}
+
+@keyframes fieldHighlight {
+  0% { background-color: #fff3cd; }
+  50% { background-color: #ffc107; }
+  100% { background-color: #fff3cd; }
+}
+
+/* Responsive para modal de resumen */
+@media (max-width: 768px) {
+  #serviceSummaryModal .modal-dialog {
+    margin: 0.5rem;
+    max-width: none;
+  }
+  
+  #serviceSummaryModal .card-body {
+    padding: 8px;
+  }
+  
+  #serviceSummaryModal .input-group-sm {
+    width: 100px !important;
+  }
+  
+  #serviceSummaryModal .badge {
+    font-size: 9px;
+    min-width: 70px;
+  }
+  
+  #serviceSummaryModal .btn {
+    font-size: 12px;
+    min-width: 90px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  #serviceSummaryModal .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  
+  #serviceSummaryModal .btn {
+    width: 100%;
+  }
+  
+  #serviceSummaryModal .row.g-3 {
+    --bs-gutter-x: 0.5rem;
+  }
+  
+  #serviceSummaryModal .input-group-sm {
+    width: 90px !important;
+  }
+}
+
+/* Efectos hover para los campos editables */
+#serviceSummaryModal input[type="number"]:hover {
+  border-color: #d4a574;
+  box-shadow: 0 0 0 0.1rem rgba(212, 165, 116, 0.1);
+}
+
+/* Estilo para campos con errores */
+.field-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Indicador de campo requerido */
+.required-field::after {
+  content: " *";
+  color: #dc3545;
+}
+
+/* Tooltip personalizado para campos */
+.field-tooltip {
+  position: relative;
+}
+
+.field-tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1000;
+}
+
+.field-tooltip:hover::before {
+  opacity: 1;
+}
