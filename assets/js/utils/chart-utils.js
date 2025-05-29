@@ -64,7 +64,7 @@ function initializeChart() {
                     intersect: false,
                     callbacks: {
                       title: function(context) {
-                        return `Hora: ${context[0].label}`;
+                        return `${context[0].label}`;
                       },
                       label: function(context) {
                         const index = context.dataIndex;
