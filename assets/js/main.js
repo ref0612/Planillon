@@ -362,3 +362,19 @@ window.initializeTooltips = initializeTooltips;
 
 // Forzar limpieza al cargar la página
 window.addEventListener('load', cleanUpModals);
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si la función initializeChart existe
+    if (typeof initializeChart === 'function') {
+        // Asegurar que el canvas existe
+        const canvas = document.getElementById('ocupacionChart');
+        if (canvas) {
+            // Inicializar el gráfico
+            initializeChart();
+        } else {
+            console.error('No se encontró el canvas para el gráfico');
+        }
+    } else {
+        console.error('La función initializeChart no está definida');
+    }
+});

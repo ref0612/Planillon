@@ -19,23 +19,27 @@
 
 .chart-container {
   position: relative;
-  height: 300px;
+  height: 200px;
   width: 100%;
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 0px;
   border: 1px solid #e5e5e7;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-#occupancyChart {
-  width: 100% !important;
-  height: 100% !important;
+.chart-placeholder {
+  width: 100%;
+  height: 300px;
+  position: relative;
 }
 
-/* Eliminar el placeholder anterior si existe */
-.chart-placeholder {
-  display: none;
+#ocupacionChart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* ========== BOTONES DE VISTA DEL GRÁFICO ========== */
