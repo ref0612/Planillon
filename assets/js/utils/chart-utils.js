@@ -15,12 +15,12 @@ function initializeChart() {
       const labels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'];
       const data = [
           { hour: '00:00', occupancy: 45, production: 1000000, incomePerKm: 1000 },
-          { hour: '01:00', occupancy: 38, production: 850000, incomePerKm: 950 },
-          { hour: '02:00', occupancy: 25, production: 400000, incomePerKm: 600 },
-          { hour: '03:00', occupancy: 15, production: 250000, incomePerKm: 420 },
-          { hour: '04:00', occupancy: 10, production: 200000, incomePerKm: 300 },
-          { hour: '05:00', occupancy: 30, production: 600000, incomePerKm: 800 },
-          { hour: '06:00', occupancy: 50, production: 1200000, incomePerKm: 1300 }
+          { hour: '01:00', occupancy: 74, production: 850000, incomePerKm: 950 },
+          { hour: '02:00', occupancy: 45, production: 400000, incomePerKm: 600 },
+          { hour: '03:00', occupancy: 65, production: 250000, incomePerKm: 420 },
+          { hour: '04:00', occupancy: 87, production: 200000, incomePerKm: 300 },
+          { hour: '05:00', occupancy: 92, production: 600000, incomePerKm: 800 },
+          { hour: '06:00', occupancy: 81, production: 1200000, incomePerKm: 1300 }
       ];
 
       // Inicializar el gráfico
@@ -73,7 +73,7 @@ function initializeChart() {
                         const formatter = new Intl.NumberFormat('es-CL'); // Para formato 1.000.000
                   
                         return [
-                          `Ocupación: $${d.occupancy}%`,
+                          `Ocupación: ${d.occupancy}%`,
                           `Producción: $${formatter.format(d.production)}`,
                           `Ingreso/km: $${(d.incomePerKm / 1000).toFixed(3)}`
                         ];
@@ -168,12 +168,12 @@ function updateChartPeriod(period, chart, data) {
       } else if (period === 'semanalView') {
           // Datos por días
           chart.data.labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-          chart.data.datasets[0].data = [45, 50, 55, 60, 65, 70, 75];
+          chart.data.datasets[0].data = [30, 60, 83, 37, 87, 93, 75];
           chart.options.scales.x.title.text = 'Día de la semana';
       } else if (period === 'mensualView') {
           // Datos por semanas
           chart.data.labels = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-          chart.data.datasets[0].data = [55, 60, 65, 70];
+          chart.data.datasets[0].data = [87, 75, 64, 90];
           chart.options.scales.x.title.text = 'Semana del mes';
       }
 
