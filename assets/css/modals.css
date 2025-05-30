@@ -343,6 +343,7 @@
 
 /* ========== DROPDOWN DE SELECT2 ========== */
 .select2-dropdown {
+  border: 2px solid #cfe2ff !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15) !important;
 }
