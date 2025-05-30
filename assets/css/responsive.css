@@ -1,27 +1,45 @@
 /* ========== MEDIA QUERIES RESPONSIVOS ========== */
 
 /* Pantallas grandes (1400px y más) */
-@media (max-width: 1400px) {
+@media (max-width: 1517px) {
+  /* Ajustes para que se vea bien en pantallas normales como 1366px */
+
+  body {
+    zoom: 0.9; /* Solución temporal */
+  }
+
+  .contenedor-principal {
+    padding: 1rem;
+    flex-direction: column;
+    font-size: 0.9rem;
+  }
+
   .search-module {
-    min-width: 480px;
+    min-width: auto;      /* Deja que se ajuste según el contenedor */
+    width: 100%;          /* Ocupa el espacio disponible */
+    box-sizing: border-box;
   }
-  
+
   .form-group select {
-    width: 140px;
+    width: 100%;          /* Se ajusta al contenedor */
+    max-width: 140px;     /* Máximo igual al original */
   }
-  
+
   .form-group input[type="date"] {
-    width: 130px;
+    width: 100%;
+    max-width: 130px;
   }
-  
+
   .tariff-module {
-    width: 200px;
+    width: 100%;
+    max-width: 200px;
   }
-  
+
   .metric-value {
-    font-size: 13px;
+    font-size: 11px;      /* Un poco más pequeño para mejor cabida */
   }
 }
+
 
 /* Pantallas medianas (1200px y menos) */
 @media (max-width: 1200px) {
