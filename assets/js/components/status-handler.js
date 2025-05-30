@@ -22,6 +22,11 @@ const STATUS_CONFIG = {
         label: 'Panne', 
         color: '#6b7280', 
         class: 'status-inactive' 
+    },
+    recaudado: { 
+        label: 'Recaudado', 
+        color: '#8b5cf6', 
+        class: 'status-recaudado' 
     }
 };
 

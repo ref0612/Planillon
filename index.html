@@ -491,8 +491,13 @@
               </div>
               <div class="status-option" data-status="alert" onclick="selectStatus('alert')">
                 <span class="status-color status-alert"></span>
-                <span>Cerrado</span>
+                <span>Inactivo</span>
                 <input type="radio" name="status" value="alert" class="d-none">
+              </div>
+              <div class="status-option" data-status="recaudado" onclick="selectStatus('recaudado')">
+                <span class="status-color status-recaudado"></span>
+                <span>Recaudado</span>
+                <input type="radio" name="status" value="recaudado" class="d-none">
               </div>
               <div class="status-option" data-status="pending" onclick="selectStatus('pending')">
                 <span class="status-color status-pending"></span>
@@ -504,6 +509,7 @@
                 <span>Panne</span>
                 <input type="radio" name="status" value="inactive" class="d-none">
               </div>
+              
             </div>
           </div>
         </div>
@@ -536,8 +542,8 @@
                   <th class="text-nowrap text-center fw-normal">Estado</th>
                   <th class="text-nowrap text-center fw-normal">Ruta</th>
                   <th class="text-nowrap text-center fw-normal">Fecha cambio</th>
-                  <th class="text-nowrap fw-normal">Usuario modifica</th>
-                  <th class="text-nowrap fw-normal">Modificación</th>
+                  <th class="text-nowrap fw-normal">Modificado Por</th>
+                  <th class="text-nowrap fw-normal">Cambio Realizado</th>
                 </tr>
               </thead>
               <tbody id="historialTablaBody"></tbody>

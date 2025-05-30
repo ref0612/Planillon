@@ -281,6 +281,10 @@
   background: #ef4444; 
 }
 
+.status-recaudado { 
+  background: #8b5cf6; 
+}
+
 /* ========== BOTONES DE ACCIÓN ========== */
 .action-buttons {
   display: flex;
