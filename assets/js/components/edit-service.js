@@ -270,10 +270,7 @@ class EditServiceHandler {
                     </div>
                 </div>
 
-                <!-- Botones -->
-                <div class="d-flex justify-content-end gap-2">
-                    <button type="button" class="btn" style="background:#fff;color:#ef4444; border-radius:8px;border:1px solid #ef4444;min-width:110px;font-size:13px;height:32px;" id="guardarCambiosBtn">Guardar cambios</button>
-                </div>
+            
             </form>
         `;
     }
