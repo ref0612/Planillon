@@ -182,205 +182,265 @@
   color: #0066cc !important;
 }
 
-/* ========== MODAL DE EDICIÓN DE SERVICIO ========== */
+/* ========== MODAL DE EDICIÓN DE SERVICIO - UNIFICADO ========== */
+#editServiceModal .modal-dialog {
+  max-width: 700px;
+  margin: 1.75rem auto;
+}
+
 #editServiceModal .modal-content {
-  border-radius: 12px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.08);
-  border: none;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#editServiceModal .modal-header {
-  background: #fff;
-  border-bottom: 0;
-  padding: 10px 18px;
-}
-
-#editServiceModal .modal-title {
-  color: #333;
-  font-size: 16px;
-}
-
-#editServiceModal .modal-body {
-  padding: 0 14px 8px 14px;
-  background: #fafafa;
-}
-
-.form-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #86868b;
-  margin-bottom: 4px;
-}
-
-.form-control, .form-select {
-  border: 1px solid #d2d2d7;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.2s;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: #d4a574;
-  box-shadow: 0 0 0 0.25rem rgba(212, 165, 116, 0.25);
-}
-
-.card {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.card-header {
-  background-color: #f5f5f7;
-  border-bottom: 1px solid #e5e5e7;
-  font-size: 14px;
-  padding: 12px 16px;
-}
-
-/* Inputs pequeños para modal de edición */
-.miniinput {
-  max-width: 280px !important;
-  min-width: 80px;
-  padding: 3px 10px !important;
-  font-size: 13px !important;
-  height: 28px !important;
-  margin-bottom: 4px;
-  color: #333;
-  border-radius: 4px;
-  border: 1px solid #ced4da;
-  background: #fff;
-}
-
-textarea.miniinput {
-  max-width: 100% !important;
-}
-
-/* ========== MODAL DE RESUMEN DE SERVICIO ========== */
-#serviceSummaryModal .modal-content {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   border: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#serviceSummaryModal .modal-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+#editServiceModal .modal-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f5f5f7 100%);
+  border-bottom: 1px solid #e5e5e7;
+  padding: 12px 16px;
   border-radius: 12px 12px 0 0;
-  padding: 10px 16px;
 }
 
-#serviceSummaryModal .modal-title {
-  font-size: 15px;
+#editServiceModal .modal-title {
   color: #333;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-#serviceSummaryModal .modal-body {
-  padding: 0;
-  background-color: #f8f9fa;
+#editServiceModal .modal-body {
+  padding: 16px;
+  background: #fafafa;
 }
 
-#serviceSummaryModal .card {
-  border: 0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+#editServiceModal .modal-footer {
+  background-color: #f5f5f7;
+  border-top: 1px solid #e5e5e7;
+  padding: 10px 16px;
+  border-radius: 0 0 12px 12px;
 }
 
-#serviceSummaryModal .card-header {
-  background-color: #fff;
-  border-bottom: 1px solid #e9ecef;
-  padding: 8px 12px;
+/* ========== FORMULARIOS UNIFICADOS ========== */
+
+/* Grupos de formulario estilizados */
+.form-group-styled {
+  position: relative;
+  margin-bottom: 12px;
 }
 
-#serviceSummaryModal .card-body {
-  padding: 12px;
-}
-
-#serviceSummaryModal .badge {
-  font-size: 10px;
-  min-width: 80px;
-}
-
-#serviceSummaryModal .input-group-text {
-  font-size: 10px;
-  background-color: #f8f9fa;
-}
-
-#serviceSummaryModal .form-control-sm {
+.form-group-styled .form-label {
   font-size: 11px;
-  height: 24px;
-}
-
-/* ========== BOTONES DE MODAL ========== */
-.btn {
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: #fff;
-}
-
-.btn-secondary:hover {
-  background-color: #5c636a;
-  border-color: #565e64;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
-  color: #fff;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
-}
-
-.btn-primary {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #0b5ed7;
-  border-color: #0a58ca;
-}
-
-.btn-outline-secondary {
+  font-weight: 600;
   color: #6c757d;
-  border-color: #6c757d;
-  background-color: transparent;
+  margin-bottom: 4px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.btn-outline-secondary:hover {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: #fff;
+/* ========== ESTILOS UNIFICADOS PARA TODOS LOS CAMPOS ========== */
+/* Aplica a TODOS los campos: input, select estándar y Select2 */
+#editServiceModal .form-control,
+#editServiceModal .form-select,
+#editServiceModal .form-control-styled,
+#editServiceModal .form-select-styled,
+#editServiceModal .select2-container .select2-selection--single {
+  height: 42px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #495057 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  line-height: 1.4 !important;
 }
 
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  border-radius: 0.375rem;
+/* Estados hover para todos los campos */
+#editServiceModal .form-control:hover:not(:focus),
+#editServiceModal .form-select:hover:not(:focus),
+#editServiceModal .form-control-styled:hover:not(:focus),
+#editServiceModal .form-select-styled:hover:not(:focus),
+#editServiceModal .select2-container .select2-selection--single:hover {
+  border-color: #ced4da !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
 }
 
-.btn-close {
-  box-sizing: content-box;
-  width: 1em;
-  height: 1em;
-  padding: 0.25em 0.25em;
-  color: #000;
-  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='m.235 1.813 5.25 5.25-5.25 5.25a.5.5 0 0 0 .708.708L6.5 7.764l5.25 5.25a.5.5 0 0 0 .708-.708L7.207 7.057l5.25-5.25a.5.5 0 0 0-.708-.708L6.5 6.35 1.25 1.101a.5.5 0 0 0-.708 0l-.306.308a.5.5 0 0 0 0 .708z'/%3e%3c/svg%3e") center/1em auto no-repeat;
-  border: 0;
-  border-radius: 0.375rem;
-  opacity: 0.5;
+/* Estados focus para todos los campos */
+#editServiceModal .form-control:focus,
+#editServiceModal .form-select:focus,
+#editServiceModal .form-control-styled:focus,
+#editServiceModal .form-select-styled:focus,
+#editServiceModal .select2-container.select2-container--focus .select2-selection--single,
+#editServiceModal .select2-container.select2-container--open .select2-selection--single {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+  outline: 0 !important;
+  transform: translateY(-1px) !important;
 }
-/* ========== ESTILOS ADICIONALES PARA MODAL DE RESUMEN ========== */
-/* Agregar estos estilos al archivo assets/css/modals.css */
+
+/* ========== FLECHAS UNIFICADAS ========== */
+/* Ocultar flechas nativas de Select2 */
+#editServiceModal .select2-container .select2-selection__arrow {
+  display: none !important;
+}
+
+/* Aplicar flecha uniforme a TODOS los selects */
+#editServiceModal .form-select,
+#editServiceModal .form-select-styled,
+#editServiceModal .select2-container .select2-selection--single {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px 12px !important;
+  padding-right: 40px !important;
+}
+
+/* Cambiar color de flecha en focus */
+#editServiceModal .form-select:focus,
+#editServiceModal .form-select-styled:focus,
+#editServiceModal .select2-container.select2-container--focus .select2-selection--single,
+#editServiceModal .select2-container.select2-container--open .select2-selection--single {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23007bff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e") !important;
+}
+
+/* ========== AJUSTES ESPECÍFICOS PARA SELECT2 ========== */
+/* Ajustar el contenido de texto */
+#editServiceModal .select2-container .select2-selection__rendered {
+  line-height: 24px !important;
+  padding-left: 0px !important;
+  padding-right: 40px !important;
+  color: #495057 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Placeholder */
+#editServiceModal .select2-container .select2-selection__placeholder {
+  color: #6c757d !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Botón limpiar (X) */
+#editServiceModal .select2-container .select2-selection__clear {
+  color: #6c757d !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  right: 35px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  transition: color 0.2s ease !important;
+  z-index: 10 !important;
+}
+
+#editServiceModal .select2-container .select2-selection__clear:hover {
+  color: #007bff !important;
+}
+
+/* ========== DROPDOWN DE SELECT2 ========== */
+.select2-dropdown {
+  border: 2px solid #007bff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15) !important;
+}
+
+.select2-results__option {
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #495057 !important;
+  background-color: #fff !important;
+  transition: all 0.2s ease !important;
+}
+
+.select2-results__option:hover,
+.select2-results__option--highlighted {
+  background-color: #e3f2fd !important;
+  color: #0056b3 !important;
+}
+
+.select2-results__option[aria-selected="true"] {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* ========== CAMPOS DE SOLO LECTURA ========== */
+#editServiceModal .form-control[readonly],
+#editServiceModal .form-control-styled[readonly] {
+  background-color: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+}
+
+#editServiceModal .form-control[readonly]:hover,
+#editServiceModal .form-control-styled[readonly]:hover {
+  transform: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ========== CARDS Y SECCIONES ========== */
+#editServiceModal .card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+}
+
+#editServiceModal .card-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #e9ecef;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+#editServiceModal .card-header h6 {
+  color: #495057;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#editServiceModal .card-body {
+  padding: 16px;
+  background: #fff;
+}
+
+/* Información del servicio (campos pequeños) */
+.service-info-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f5f5f7 100%);
+  border: 1px solid #e5e5e7;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.service-info-section .form-control-sm {
+  height: 28px;
+  font-size: 11px;
+  padding: 3px 6px;
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.service-info-section .form-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
 
 /* ========== MODAL DE RESUMEN DE SERVICIO ========== */
 #serviceSummaryModal .modal-content {
@@ -441,8 +501,8 @@ textarea.miniinput {
 }
 
 #serviceSummaryModal .form-control-sm:focus {
-  border-color: #d4a574;
-  box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.25);
+  border-color: #ef4444;
+  box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25);
 }
 
 #serviceSummaryModal .form-control-sm[readonly] {
@@ -463,7 +523,682 @@ textarea.miniinput {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Estilo para campos de cálculo */
+/* ========== ESTILOS PARA REASIGNACIÓN DE ASIENTOS ========== */
+
+/* Pestañas del modal */
+.nav-tabs {
+  border-bottom: 2px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f5f5f7 100%);
+  padding: 0 20px;
+  margin: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -2px;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 0;
+  padding: 12px 20px;
+  color: #6c757d;
+  font-weight: 500;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  font-size: 13px;
+  margin-right: 0;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  color: #ef4444;
+  background: transparent;
+  border-bottom: 3px solid #ef4444;
+  border-color: transparent transparent #ef4444 transparent;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Contenedor principal de asientos */
+.seat-mapping-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  min-height: 400px;
+  background: #fff;
+}
+
+/* Información del bus */
+.bus-info {
+  background: white;
+  border: 2px solid #e5e5e7;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.bus-info h5 {
+  color: #ef4444;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.bus-info .bus-details {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+/* Mapa de asientos */
+.seat-map {
+  display: grid;
+  gap: 4px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e5e5e7;
+}
+
+.seat-map.layout-20 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 200px;
+}
+
+.seat-map.layout-46 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 220px;
+}
+
+.seat-map.layout-42 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 220px;
+}
+
+.seat-map.layout-36 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 180px;
+}
+
+.seat {
+  width: 32px;
+  height: 28px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.seat.occupied {
+  background: #ef4444;
+  color: white;
+  border-color: #dc2626;
+}
+
+.seat.available {
+  background: #10b981;
+  color: white;
+  border-color: #059669;
+}
+
+.seat.mapped {
+  background: #8b5cf6;
+  color: white;
+  border-color: #7c3aed;
+}
+
+.seat:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Tabla de mapeo */
+.mapping-table-container {
+  flex: 1;
+  max-width: 500px;
+}
+
+.mapping-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e7;
+}
+
+.mapping-table-header {
+  background: #f8f9fa;
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e7;
+}
+
+.mapping-table-header h6 {
+  margin: 0;
+  color: #495057;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.table-responsive {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.mapping-table .table th {
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 8px 12px;
+  border: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mapping-table .table td {
+  padding: 6px 12px;
+  font-size: 11px;
+  vertical-align: middle;
+  border: none;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.mapping-table .table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* Select para asientos */
+.seat-select {
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 70px;
+  transition: all 0.3s ease;
+}
+
+.seat-select:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 0.15rem rgba(239, 68, 68, 0.25);
+}
+
+/* Botones de acción automática */
+.auto-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.auto-btn {
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e7;
+  background: white;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auto-btn:hover {
+  background: #f8f9fa;
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: translateY(-1px);
+}
+
+.auto-btn.primary {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.auto-btn.primary:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Leyenda */
+.legend {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+}
+
+/* Badges de estado */
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* ========== BOTONES DE MODAL ========== */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5c636a;
+  border-color: #565e64;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000;
+}
+
+.btn-warning:hover {
+  background-color: #ffca2c;
+  border-color: #ffc720;
+}
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+}
+
+.btn-close {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.25em 0.25em;
+  color: #000;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='m.235 1.813 5.25 5.25-5.25 5.25a.5.5 0 0 0 .708.708L6.5 7.764l5.25 5.25a.5.5 0 0 0 .708-.708L7.207 7.057l5.25-5.25a.5.5 0 0 0-.708-.708L6.5 6.35 1.25 1.101a.5.5 0 0 0-.708 0l-.306.308a.5.5 0 0 0 0 .708z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: 0.5;
+}
+
+/* ========== SPINNER ========== */
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: -0.125em;
+  border: 0.25em solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-border.text-primary {
+  color: #0d6efd;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .seat-mapping-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
+  
+  .auto-actions {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .auto-btn {
+    text-align: center;
+  }
+  
+  .table-responsive {
+    max-height: 250px;
+  }
+  
+  .legend {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Modal de edición en móvil */
+  #editServiceModal .modal-body {
+    padding: 12px;
+  }
+  
+  #editServiceModal .card-body {
+    padding: 12px;
+  }
+  
+  #editServiceModal .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  #editServiceModal .col-md-6 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Mantener altura y tamaño en móvil */
+  #editServiceModal .form-control,
+  #editServiceModal .form-select,
+  #editServiceModal .form-control-styled,
+  #editServiceModal .form-select-styled,
+  #editServiceModal .select2-container .select2-selection--single {
+    height: 38px !important;
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+  }
+  
+  .form-group-styled .form-label {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-tabs {
+    padding: 0 10px;
+  }
+  
+  .nav-tabs .nav-link {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .seat-mapping-container {
+    padding: 10px;
+  }
+  
+  .bus-info {
+    padding: 10px;
+  }
+  
+  .seat-map.layout-20,
+  .seat-map.layout-46,
+  .seat-map.layout-42 {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 150px;
+  }
+  
+  .seat-map.layout-36 {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 140px;
+  }
+  
+  .auto-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .auto-btn {
+    text-align: center;
+  }
+  
+  .table-responsive {
+    max-height: 250px;
+  }
+  
+  .legend {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Modal de edición en móvil muy pequeño */
+  #editServiceModal .modal-body {
+    padding: 15px;
+  }
+  
+  #editServiceModal .card-body {
+    padding: 16px;
+  }
+  
+  #editServiceModal .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  #editServiceModal .col-md-6 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Tamaños para móviles muy pequeños */
+  #editServiceModal .form-control,
+  #editServiceModal .form-select,
+  #editServiceModal .form-control-styled,
+  #editServiceModal .form-select-styled,
+  #editServiceModal .select2-container .select2-selection--single {
+    height: 36px !important;
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+  
+  .form-group-styled .form-label {
+    font-size: 11px;
+  }
+}
+
+/* ========== ANIMACIONES ========== */
+.seat-map {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.mapping-table {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efecto de loading para la tabla */
+.mapping-table.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+.mapping-table.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #ef4444;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Estados de hover mejorados */
+.auto-btn:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.seat-select:hover {
+  border-color: #ef4444;
+}
+
+/* Fix para scroll en tablas pequeñas */
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ========== ESTILOS ESPECÍFICOS PARA TAB-CONTENT ========== */
+.tab-content {
+  border: none;
+  background: #fff;
+}
+
+.tab-pane {
+  border: none;
+}
+
+/* ========== CAMPOS CON VALIDACIÓN ========== */
+#editServiceModal .form-control.is-valid,
+#editServiceModal .form-select.is-valid,
+#editServiceModal .form-control-styled.is-valid,
+#editServiceModal .form-select-styled.is-valid {
+  border-color: #28a745 !important;
+}
+
+#editServiceModal .form-control.is-valid:focus,
+#editServiceModal .form-select.is-valid:focus,
+#editServiceModal .form-control-styled.is-valid:focus,
+#editServiceModal .form-select-styled.is-valid:focus {
+  border-color: #28a745 !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+#editServiceModal .form-control.is-invalid,
+#editServiceModal .form-select.is-invalid,
+#editServiceModal .form-control-styled.is-invalid,
+#editServiceModal .form-select-styled.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+#editServiceModal .form-control.is-invalid:focus,
+#editServiceModal .form-select.is-invalid:focus,
+#editServiceModal .form-control-styled.is-invalid:focus,
+#editServiceModal .form-select-styled.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* ========== ANIMACIÓN PARA LOS CAMPOS ========== */
+@keyframes fieldFocus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#editServiceModal .form-control:focus,
+#editServiceModal .form-select:focus,
+#editServiceModal .form-control-styled:focus,
+#editServiceModal .form-select-styled:focus {
+  animation: fieldFocus 0.3s ease;
+}
+
+/* ========== CAMPOS DE CÁLCULO Y TOTALES ========== */
 .calculation-field {
   background-color: #fff3cd !important;
   border-color: #ffeaa7 !important;
@@ -471,10 +1206,9 @@ textarea.miniinput {
 
 .calculation-field:focus {
   background-color: #fff !important;
-  border-color: #d4a574 !important;
+  border-color: #ef4444 !important;
 }
 
-/* Estilo para totales */
 .total-field {
   background-color: #f1f8ff !important;
   border-color: #b8daff !important;
@@ -482,7 +1216,7 @@ textarea.miniinput {
   color: #004085 !important;
 }
 
-/* Secciones de gastos */
+/* ========== SECCIONES DE GASTOS ========== */
 .gastos-conductor .card-header {
   background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%) !important;
 }
@@ -491,7 +1225,7 @@ textarea.miniinput {
   background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%) !important;
 }
 
-/* Animaciones para campos que cambian */
+/* ========== ANIMACIONES PARA CAMPOS QUE CAMBIAN ========== */
 .field-updated {
   animation: fieldHighlight 0.5s ease-in-out;
 }
@@ -502,71 +1236,19 @@ textarea.miniinput {
   100% { background-color: #fff3cd; }
 }
 
-/* Responsive para modal de resumen */
-@media (max-width: 768px) {
-  #serviceSummaryModal .modal-dialog {
-    margin: 0.5rem;
-    max-width: none;
-  }
-  
-  #serviceSummaryModal .card-body {
-    padding: 8px;
-  }
-  
-  #serviceSummaryModal .input-group-sm {
-    width: 100px !important;
-  }
-  
-  #serviceSummaryModal .badge {
-    font-size: 9px;
-    min-width: 70px;
-  }
-  
-  #serviceSummaryModal .btn {
-    font-size: 12px;
-    min-width: 90px;
-    height: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  #serviceSummaryModal .d-flex.gap-2 {
-    flex-direction: column;
-    gap: 8px !important;
-  }
-  
-  #serviceSummaryModal .btn {
-    width: 100%;
-  }
-  
-  #serviceSummaryModal .row.g-3 {
-    --bs-gutter-x: 0.5rem;
-  }
-  
-  #serviceSummaryModal .input-group-sm {
-    width: 90px !important;
-  }
-}
-
-/* Efectos hover para los campos editables */
-#serviceSummaryModal input[type="number"]:hover {
-  border-color: #d4a574;
-  box-shadow: 0 0 0 0.1rem rgba(212, 165, 116, 0.1);
-}
-
-/* Estilo para campos con errores */
+/* ========== ESTILO PARA CAMPOS CON ERRORES ========== */
 .field-error {
   border-color: #dc3545 !important;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Indicador de campo requerido */
+/* ========== INDICADOR DE CAMPO REQUERIDO ========== */
 .required-field::after {
   content: " *";
   color: #dc3545;
 }
 
-/* Tooltip personalizado para campos */
+/* ========== TOOLTIP PERSONALIZADO PARA CAMPOS ========== */
 .field-tooltip {
   position: relative;
 }
@@ -591,4 +1273,252 @@ textarea.miniinput {
 
 .field-tooltip:hover::before {
   opacity: 1;
+}
+
+/* ========== AJUSTES FINALES ========== */
+#editServiceModal .mb-3:last-child {
+  margin-bottom: 0 !important;
+}
+
+#editServiceModal .card:last-child {
+  margin-bottom: 0;
+}
+
+#editServiceModal .p-3 {
+  padding: 1rem !important;
+}
+
+#editServiceModal .modal-footer .btn {
+  min-width: 100px;
+}
+
+#editServiceModal .modal-xl {
+  max-width: 1140px;
+}
+
+#editServiceModal .row + .row {
+  margin-top: 0.5rem;
+}
+
+#editServiceModal .form-label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.tab-pane .p-3 {
+  background: #fff;
+}
+
+.nav-tabs .nav-link:not(.active) {
+  opacity: 0.7;
+}
+
+.nav-tabs .nav-link:not(.active):hover {
+  opacity: 1;
+}
+
+/* ========== RESPONSIVE FINAL PARA TODOS LOS MODALES ========== */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  .modal-header {
+    padding: 0.75rem;
+  }
+  
+  .modal-body {
+    padding: 0.75rem;
+  }
+  
+  .modal-footer {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .modal-footer .btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+/* ========== MEJORAS PARA EL MODAL DE ESTADO - COLORES DINÁMICOS ========== */
+
+/* Opciones de estado con colores dinámicos */
+.status-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e5e7eb;
+  background: white;
+}
+
+.status-option:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Estados específicos cuando están seleccionados */
+.status-option.selected {
+  transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Colores específicos para cada estado seleccionado */
+.status-option.selected[data-status="active"] {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1px #10b981, 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+}
+
+.status-option.selected[data-status="alert"] {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444, 0 4px 12px rgba(239, 68, 68, 0.2) !important;
+}
+
+.status-option.selected[data-status="recaudado"] {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 0 1px #8b5cf6, 0 4px 12px rgba(139, 92, 246, 0.2) !important;
+}
+
+.status-option.selected[data-status="pending"] {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 1px #f59e0b, 0 4px 12px rgba(245, 158, 11, 0.2) !important;
+}
+
+.status-option.selected[data-status="inactive"] {
+  background-color: rgba(107, 114, 128, 0.1) !important;
+  border-color: #6b7280 !important;
+  box-shadow: 0 0 0 1px #6b7280, 0 4px 12px rgba(107, 114, 128, 0.2) !important;
+}
+
+/* Colores del círculo indicador */
+.status-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+/* Colores específicos para cada indicador */
+.status-option[data-status="active"] .status-color {
+  background-color: #10b981;
+}
+
+.status-option[data-status="alert"] .status-color {
+  background-color: #ef4444;
+}
+
+.status-option[data-status="recaudado"] .status-color {
+  background-color: #8b5cf6;
+}
+
+.status-option[data-status="pending"] .status-color {
+  background-color: #f59e0b;
+}
+
+.status-option[data-status="inactive"] .status-color {
+  background-color: #6b7280;
+}
+
+/* Efectos adicionales para la opción seleccionada */
+.status-option.selected .status-color {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Texto de la opción */
+.status-option span {
+  font-size: 0.95rem;
+  color: #1f2937;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Texto cuando está seleccionado */
+.status-option.selected span {
+  font-weight: 600 !important;
+}
+
+/* Colores específicos del texto para cada estado seleccionado */
+.status-option.selected[data-status="active"] span {
+  color: #047857 !important;
+}
+
+.status-option.selected[data-status="alert"] span {
+  color: #dc2626 !important;
+}
+
+.status-option.selected[data-status="recaudado"] span {
+  color: #7c3aed !important;
+}
+
+.status-option.selected[data-status="pending"] span {
+  color: #d97706 !important;
+}
+
+.status-option.selected[data-status="inactive"] span {
+  color: #4b5563 !important;
+}
+
+/* Animación suave al cambiar selección */
+@keyframes statusPulse {
+  0% {
+    transform: translateX(2px) scale(1);
+  }
+  50% {
+    transform: translateX(2px) scale(1.02);
+  }
+  100% {
+    transform: translateX(2px) scale(1);
+  }
+}
+
+.status-option.selected {
+  animation: statusPulse 0.5s ease-out;
+}
+
+/* Hover con colores específicos */
+.status-option[data-status="active"]:hover:not(.selected) {
+  background-color: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.status-option[data-status="alert"]:hover:not(.selected) {
+  background-color: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.status-option[data-status="recaudado"]:hover:not(.selected) {
+  background-color: rgba(139, 92, 246, 0.05);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.status-option[data-status="pending"]:hover:not(.selected) {
+  background-color: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.status-option[data-status="inactive"]:hover:not(.selected) {
+  background-color: rgba(107, 114, 128, 0.05);
+  border-color: rgba(107, 114, 128, 0.3);
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(2px) scale(1);
+  }
+  to {
+    opacity: 0.7;
+    transform: translateX(0) scale(0.98);
+  }
 }
