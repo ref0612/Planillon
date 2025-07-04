@@ -76,9 +76,44 @@ class ChangeRouteHandler {
           tags: false,
           templateResult: function(state) {
             return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipCities'));
+          },
+          templateSelection: function(state) {
+            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipCities'));
           }
-        }).on('select2:select select2:unselect', function() {
-          $(this).trigger('change.select2');
+        }).on('change', function() {
+          const omitidas = $(this).val() || [];
+          const paresSelect = $('#changeRouteSkipPairs');
+          // Restaurar todas las opciones de ciudades posibles en el select de omitidas
+          const allCities = ['Arica', 'Calama', 'Antofagasta', 'Algarrobo'];
+          // Limpiar y volver a agregar todas las opciones
+          $('#changeRouteSkipCities').empty();
+          allCities.forEach(ciudad => {
+            if (omitidas.includes(ciudad)) {
+              $('#changeRouteSkipCities').append(`<option value="${ciudad}" selected>${ciudad}</option>`);
+            } else {
+              $('#changeRouteSkipCities').append(`<option value="${ciudad}">${ciudad}</option>`);
+            }
+          });
+          // Refrescar Select2 y mantener seleccionadas las omitidas
+          setTimeout(() => {
+            $('#changeRouteSkipCities').val(omitidas).trigger('change.select2');
+          }, 0);
+          // Regenerar las opciones de pares válidos
+          const ciudadesValidas = allCities.filter(c => !omitidas.includes(c));
+          const pares = [];
+          for (let i = 0; i < ciudadesValidas.length; i++) {
+            for (let j = i + 1; j < ciudadesValidas.length; j++) {
+              pares.push(`${ciudadesValidas[i]}-${ciudadesValidas[j]}`);
+            }
+          }
+          const paresSeleccionados = paresSelect.val() || [];
+          paresSelect.empty();
+          pares.forEach(par => {
+            paresSelect.append(`<option value="${par}">${par.replace(/-/g, ' - ')}</option>`);
+          });
+          // Mantener seleccionados solo los pares válidos
+          const nuevos = paresSeleccionados.filter(par => pares.includes(par));
+          paresSelect.val(nuevos).trigger('change.select2');
         });
         $('#changeRouteSkipPairs').select2({
           theme: 'bootstrap-5',
@@ -89,6 +124,9 @@ class ChangeRouteHandler {
           closeOnSelect: true,
           tags: false,
           templateResult: function(state) {
+            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipPairs'));
+          },
+          templateSelection: function(state) {
             return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipPairs'));
           }
         }).on('select2:select select2:unselect', function() {
@@ -343,24 +381,34 @@ class ChangeRouteHandler {
         }
         html += `</td>`;
         html += `<td>`;
-        html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-h" style="width:48px;padding:2px 4px;">`;
-        for(let h=0; h<24; h++) {
-          let hStr = h.toString().padStart(2,'0');
-          html += `<option value="${hStr}"${etapa.esperaH==hStr?' selected':''}>${hStr}</option>`;
+        if (cidx === Object.entries(this.etapasPorCiudad).length - 1 && eidx === etapas.length - 1) {
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-h' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select> : `;
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-m' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select>`;
+        } else {
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-h" style="width:48px;padding:2px 4px;">`;
+          for(let h=0; h<24; h++) {
+            let hStr = h.toString().padStart(2,'0');
+            html += `<option value="${hStr}"${etapa.esperaH==hStr?' selected':''}>${hStr}</option>`;
+          }
+          html += `</select> : `;
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-m" style="width:48px;padding:2px 4px;">`;
+          for(let m=0; m<60; m++) {
+            let mStr = m.toString().padStart(2,'0');
+            html += `<option value="${mStr}"${etapa.esperaM==mStr?' selected':''}>${mStr}</option>`;
+          }
+          html += `</select>`;
         }
-        html += `</select> : `;
-        html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-m" style="width:48px;padding:2px 4px;">`;
-        for(let m=0; m<60; m++) {
-          let mStr = m.toString().padStart(2,'0');
-          html += `<option value="${mStr}"${etapa.esperaM==mStr?' selected':''}>${mStr}</option>`;
-        }
-        html += `</select>`;
         html += `</td>`;
-        html += `<td class="text-center"><span class="arr_time rec" style="font-size:0.70em;">${t.llegada}</span></td>`;
         html += `<td class="text-center">`;
-        // Embarque: si es la primera ciudad y la primera etapa, mostrar 00:00 fijo y resaltado
         if (cidx === 0 && eidx === 0) {
-          html += `<span class="calc_time rec fw-bold text-primary" style="font-size:0.85em;">00:00</span>`;
+          html += `-`;
+        } else {
+          html += `<span class="arr_time rec" style="font-size:0.70em;">${t.llegada}</span>`;
+        }
+        html += `</td>`;
+        html += `<td class="text-center">`;
+        if (cidx === 0 && eidx === 0) {
+          html += `<span class="calc_time rec fw-bold text-primary" style="font-size:0.85em;">${document.getElementById('embarqueH')?.value.padStart(2,'0') || '00'}:${document.getElementById('embarqueM')?.value.padStart(2,'0') || '00'}</span>`;
         } else {
           html += `<span class="calc_time rec" style="font-size:0.70em;">${t.embarque}</span>`;
         }
@@ -381,23 +429,46 @@ class ChangeRouteHandler {
     let tiemposPorCiudad = {};
     let totalMin = 0;
     let currentMin = embarqueInicial;
-    
-    Object.entries(this.etapasPorCiudad).forEach(([city, etapas]) => {
+    let isFirst = true;
+    const ciudades = Object.entries(this.etapasPorCiudad);
+    let lastEmbarque = embarqueInicial;
+    ciudades.forEach(([city, etapas], cidx) => {
       tiemposPorCiudad[city] = [];
       etapas.forEach((etapa, idx) => {
         let dur = parseInt(etapa.duracionH) * 60 + parseInt(etapa.duracionM);
         let esp = parseInt(etapa.esperaH) * 60 + parseInt(etapa.esperaM);
-        let llegada = idx === 0 && totalMin === 0 ? '-' : this.toHHMM(currentMin);
-        let embarque = this.toHHMM(currentMin + esp);
+        let llegada, embarque;
+        // Primera etapa de la primera ciudad
+        if (isFirst && idx === 0) {
+          llegada = '-';
+          embarque = this.toHHMM(embarqueInicial);
+          etapa.duracionH = '00';
+          etapa.duracionM = '00';
+          etapa.esperaH = '00';
+          etapa.esperaM = '00';
+        } else {
+          llegada = this.toHHMM(lastEmbarque + dur);
+          embarque = this.toHHMM(lastEmbarque + dur + esp);
+        }
+        // Solo la última etapa de la última ciudad debe estar freezed en espera
+        if (cidx === ciudades.length - 1 && idx === etapas.length - 1) {
+          etapa.esperaH = '00';
+          etapa.esperaM = '00';
+        }
         tiemposPorCiudad[city].push({
           llegada,
           embarque
         });
-        currentMin += dur + esp;
-        totalMin += dur + esp;
+        // Sumar duración y espera de cada etapa al acumulado
+        if (isFirst && idx === 0) {
+          isFirst = false;
+        } else {
+          lastEmbarque = lastEmbarque + dur + esp;
+          currentMin = lastEmbarque;
+          totalMin += dur + esp;
+        }
       });
     });
-    
     return { tiemposPorCiudad, tiempoTotal: this.toHHMM(totalMin) };
   }
 
@@ -430,19 +501,23 @@ class ChangeRouteHandler {
     document.querySelectorAll('.btn-add-etapa').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const city = e.target.closest('.btn-add-etapa').getAttribute('data-ciudad');
-        this.etapasPorCiudad[city].push({
-          nombre: '',
-          distancia: 0,
-          duracionH: '01',
-          duracionM: '00',
-          esperaH: '00',
-          esperaM: '00',
-          subida: false,
-          bajada: false,
-          intermedio: true,
-          editando: true
-        });
-        this.rerenderStages(embarqueH, embarqueM);
+        // Mostrar popup para ingresar nombre
+        const nombre = prompt('Ingrese el nombre de la nueva etapa:');
+        if (nombre && nombre.trim().length > 0) {
+          this.etapasPorCiudad[city].push({
+            nombre: nombre.trim(),
+            distancia: 0,
+            duracionH: '01',
+            duracionM: '00',
+            esperaH: '00',
+            esperaM: '00',
+            subida: false,
+            bajada: false,
+            intermedio: true,
+            editando: false
+          });
+          this.rerenderStages(embarqueH, embarqueM);
+        }
       });
     });
     
@@ -556,14 +631,27 @@ class ChangeRouteHandler {
   }
 
   rerenderStages(embarqueH, embarqueM) {
+    // Guardar el estado expandido de los acordeones
+    const expanded = {};
+    document.querySelectorAll('.accordion-collapse').forEach(acc => {
+      if (acc.classList.contains('show')) {
+        expanded[acc.id] = true;
+      }
+    });
     const dynamicContent = document.getElementById('dynamicStagesContent');
-    if (dynamicContent) {
-      const html = this.generateStagesHTML(embarqueH, embarqueM);
-      dynamicContent.innerHTML = html;
-      setTimeout(() => {
-        this.attachStagesEvents(embarqueH, embarqueM);
-      }, 100);
-    }
+    if (!dynamicContent) return;
+    dynamicContent.innerHTML = this.generateStagesHTML(embarqueH, embarqueM);
+    // Restaurar el estado expandido
+    Object.keys(expanded).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.classList.contains('show')) {
+        const bsCollapse = bootstrap.Collapse.getOrCreateInstance(el, {toggle: false});
+        bsCollapse.show();
+      }
+    });
+    setTimeout(() => {
+      this.attachStagesEvents(embarqueH, embarqueM);
+    }, 100);
   }
 
   getChangeRouteModalHTML(serviceData) {
