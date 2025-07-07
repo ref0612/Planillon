@@ -55,6 +55,128 @@ class ChangeRouteHandler {
     const modalHtml = this.getChangeRouteModalHTML(serviceData);
     document.body.insertAdjacentHTML('beforeend', modalHtml);
     
+    // --- NUEVO: Lógica para rutas distintas y ciudades ejemplo ---
+    // Definir ciudades por ruta
+    const rutasCiudades = {
+      'Autopista X Pardo': ['Arica', 'Calama', 'Antofagasta', 'Algarrobo'],
+      'Ruta 2': ['Santiago', 'Rancagua', 'Talca', 'Chillán', 'Concepción'],
+      'Ruta 3': ['Valparaíso', 'Viña del Mar', 'La Serena', 'Coquimbo'],
+      'Ruta 4': ['Iquique', 'Pozo Almonte', 'Calama', 'Antofagasta']
+    };
+    // Utilidad para obtener ciudades de la ruta seleccionada
+    function getCurrentRouteCities() {
+      const rutaSel = document.getElementById('changeRouteRuta');
+      return rutasCiudades[rutaSel?.value] || rutasCiudades['Autopista X Pardo'];
+    }
+    // Función para actualizar selects y secuencia según ruta y omisiones
+    const updateCiudadesPorRuta = (ruta, omitidas = [], omitPairs = []) => {
+      const allCities = rutasCiudades[ruta] || rutasCiudades['Autopista X Pardo'];
+      // Obtener origen y destino actuales
+      const originSel = document.getElementById('changeRouteOrigin');
+      const destSel = document.getElementById('changeRouteDestination');
+      const origen = originSel?.value || allCities[0];
+      const destino = destSel?.value || allCities[allCities.length-1];
+      const idxOrigen = allCities.indexOf(origen);
+      const idxDestino = allCities.indexOf(destino);
+      let secuenciaRango = [];
+      if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen < idxDestino) {
+        secuenciaRango = allCities.slice(idxOrigen, idxDestino + 1);
+      } else if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen > idxDestino) {
+        secuenciaRango = allCities.slice(idxDestino, idxOrigen + 1).reverse();
+      }
+      // Remover de omitidas cualquier ciudad fuera de la secuencia
+      const omitidasFiltradas = omitidas.filter(c => secuenciaRango.includes(c));
+      // Actualizar selects de omitidas
+      const skipCitiesSel = document.getElementById('changeRouteSkipCities');
+      if (skipCitiesSel) {
+        skipCitiesSel.innerHTML = secuenciaRango.slice(1, -1).map(c => `<option value="${c}"${omitidasFiltradas.includes(c)?' selected':''}>${c}</option>`).join('');
+      }
+      // Actualizar pares de tramos
+      const skipPairsSel = document.getElementById('changeRouteSkipPairs');
+      let filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
+      if (skipPairsSel) {
+        let pairs = [];
+        for (let i = 0; i < filtered.length; i++) {
+          for (let j = i + 1; j < filtered.length; j++) {
+            pairs.push(`${filtered[i]}-${filtered[j]}`);
+          }
+        }
+        const nuevos = (omitPairs || []).filter(par => pairs.includes(par));
+        skipPairsSel.innerHTML = pairs.map(p => `<option value=\"${p}\"${nuevos.includes(p)?' selected':''}>${p.replace(/-/g, ' - ')}</option>`).join('');
+        $(skipPairsSel).val(nuevos).trigger('change.select2');
+      }
+      // Actualizar secuencia de ciudades (solo depende de omitidas)
+      filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
+      const seqSpan = document.getElementById('citySequenceSpan');
+      if (seqSpan) {
+        seqSpan.innerHTML = filtered.map((c, i) => `
+          <div class='d-flex align-items-center'>
+            <span class='badge bg-secondary me-2' style='font-size:13px;'>${c}</span>
+            ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
+          </div>
+        `).join('');
+      }
+      // Actualizar selects de origen/destino
+      if (originSel && destSel) {
+        const currentOrigin = originSel.value;
+        const currentDest = destSel.value;
+        // Mostrar SIEMPRE todas las ciudades de la ruta base
+        const allCities = rutasCiudades[ruta] || rutasCiudades['Autopista X Pardo'];
+        originSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+        destSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+        if (allCities.includes(currentOrigin)) {
+          originSel.value = currentOrigin;
+        } else {
+          originSel.value = allCities[0];
+        }
+        if (allCities.includes(currentDest)) {
+          destSel.value = currentDest;
+        } else {
+          destSel.value = allCities[allCities.length-1];
+        }
+      }
+      // Actualizar organigrama
+      setTimeout(() => {
+        this.renderRouteOrganigram(serviceData, omitidasFiltradas, omitPairs, filtered);
+      }, 100);
+    };
+    // Evento para cambio de ruta
+    setTimeout(() => {
+      const rutaSel = document.getElementById('changeRouteRuta');
+      if (rutaSel) {
+        rutaSel.addEventListener('change', (e) => {
+          // Limpiar selects de omitir ciudades y tramos
+          if (window.$ && window.$.fn && window.$.fn.select2) {
+            $('#changeRouteSkipCities').val([]).trigger('change.select2');
+            $('#changeRouteSkipPairs').val([]).trigger('change.select2');
+          }
+          // Al cambiar ruta, mostrar origen y destino de la ruta base
+          const allCities = rutasCiudades[e.target.value] || rutasCiudades['Autopista X Pardo'];
+          const originSel = document.getElementById('changeRouteOrigin');
+          const destSel = document.getElementById('changeRouteDestination');
+          if (originSel && destSel) {
+            originSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+            destSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+            originSel.value = allCities[0];
+            destSel.value = allCities[allCities.length-1];
+          }
+          updateCiudadesPorRuta(e.target.value, [], []);
+        });
+        // Inicializar según la ruta actual
+        const allCities = rutasCiudades[rutaSel.value] || rutasCiudades['Autopista X Pardo'];
+        const originSel = document.getElementById('changeRouteOrigin');
+        const destSel = document.getElementById('changeRouteDestination');
+        if (originSel && destSel) {
+          originSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+          destSel.innerHTML = allCities.map(c => `<option value="${c}">${c}</option>`).join('');
+          originSel.value = allCities[0];
+          destSel.value = allCities[allCities.length-1];
+        }
+        updateCiudadesPorRuta(rutaSel.value);
+      }
+    }, 300);
+    // --- FIN NUEVO ---
+    
     // Inicializar Select2 en los selects múltiples
     setTimeout(() => {
       if (window.$ && window.$.fn && window.$.fn.select2) {
@@ -83,23 +205,38 @@ class ChangeRouteHandler {
         }).on('change', function() {
           const omitidas = $(this).val() || [];
           const paresSelect = $('#changeRouteSkipPairs');
-          // Restaurar todas las opciones de ciudades posibles en el select de omitidas
-          const allCities = ['Arica', 'Calama', 'Antofagasta', 'Algarrobo'];
-          // Limpiar y volver a agregar todas las opciones
+          // SIEMPRE usar el rango entre origen y destino seleccionados
+          const originSel = document.getElementById('changeRouteOrigin');
+          const destSel = document.getElementById('changeRouteDestination');
+          const origen = originSel.value;
+          const destino = destSel.value;
+          // Buscar la ruta base solo para saber el orden
+          const rutaSel = document.getElementById('changeRouteRuta');
+          const allCities = rutasCiudades[rutaSel?.value] || rutasCiudades['Autopista X Pardo'];
+          const idxOrigen = allCities.indexOf(origen);
+          const idxDestino = allCities.indexOf(destino);
+          let secuenciaRango = [];
+          if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen < idxDestino) {
+            secuenciaRango = allCities.slice(idxOrigen, idxDestino + 1);
+          } else if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen > idxDestino) {
+            secuenciaRango = allCities.slice(idxDestino, idxOrigen + 1).reverse();
+          }
+          // Remover de omitidas cualquier ciudad fuera de la secuencia
+          const omitidasFiltradas = omitidas.filter(c => secuenciaRango.includes(c));
+          // Actualizar selects de omitidas
           $('#changeRouteSkipCities').empty();
-          allCities.forEach(ciudad => {
-            if (omitidas.includes(ciudad)) {
+          secuenciaRango.slice(1, -1).forEach(ciudad => {
+            if (omitidasFiltradas.includes(ciudad)) {
               $('#changeRouteSkipCities').append(`<option value="${ciudad}" selected>${ciudad}</option>`);
             } else {
               $('#changeRouteSkipCities').append(`<option value="${ciudad}">${ciudad}</option>`);
             }
           });
-          // Refrescar Select2 y mantener seleccionadas las omitidas
           setTimeout(() => {
-            $('#changeRouteSkipCities').val(omitidas).trigger('change.select2');
+            $('#changeRouteSkipCities').val(omitidasFiltradas).trigger('change.select2');
           }, 0);
-          // Regenerar las opciones de pares válidos
-          const ciudadesValidas = allCities.filter(c => !omitidas.includes(c));
+          // Actualizar pares de tramos
+          const ciudadesValidas = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
           const pares = [];
           for (let i = 0; i < ciudadesValidas.length; i++) {
             for (let j = i + 1; j < ciudadesValidas.length; j++) {
@@ -111,9 +248,42 @@ class ChangeRouteHandler {
           pares.forEach(par => {
             paresSelect.append(`<option value="${par}">${par.replace(/-/g, ' - ')}</option>`);
           });
-          // Mantener seleccionados solo los pares válidos
           const nuevos = paresSeleccionados.filter(par => pares.includes(par));
           paresSelect.val(nuevos).trigger('change.select2');
+          // Actualizar secuencia de ciudades
+          let filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
+          const seqSpan = document.getElementById('citySequenceSpan');
+          if (seqSpan) {
+            seqSpan.innerHTML = filtered.map((c, i) => `
+              <div class='d-flex align-items-center'>
+                <span class='badge bg-secondary me-2' style='font-size:13px;'>${c}</span>
+                ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
+              </div>
+            `).join('');
+          }
+          // Actualizar selects de origen/destino (mantener el valor seleccionado si es posible)
+          if (originSel && destSel) {
+            const currentOrigin = originSel.value;
+            const currentDest = destSel.value;
+            originSel.innerHTML = filtered.map(c => `<option value="${c}">${c}</option>`).join('');
+            destSel.innerHTML = filtered.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (filtered.includes(currentOrigin)) {
+              originSel.value = currentOrigin;
+            } else if (filtered.length > 0) {
+              originSel.value = filtered[0];
+            }
+            if (filtered.includes(currentDest)) {
+              destSel.value = currentDest;
+            } else if (filtered.length > 0) {
+              destSel.value = filtered[filtered.length-1];
+            }
+          }
+          // Actualizar organigrama
+          setTimeout(() => {
+            if (window.changeRouteHandler && typeof window.changeRouteHandler.renderRouteOrganigram === 'function') {
+              window.changeRouteHandler.renderRouteOrganigram({}, omitidasFiltradas, nuevos, filtered);
+            }
+          }, 100);
         });
         $('#changeRouteSkipPairs').select2({
           theme: 'bootstrap-5',
@@ -136,29 +306,22 @@ class ChangeRouteHandler {
         const rerenderOrganigram = () => {
           const omitCities = $('#changeRouteSkipCities').val() || [];
           const omitPairs = $('#changeRouteSkipPairs').val() || [];
-          this.renderRouteOrganigram(serviceData, omitCities, omitPairs);
-          // Actualizar secuencia de ciudades
-          const allCities = ['Arica', 'Calama', 'Antofagasta', 'Algarrobo'];
-          let filtered = allCities.filter(c => !omitCities.includes(c));
-          if (omitPairs.length > 0 && filtered.length > 1) {
-            let newFiltered = [filtered[0]];
-            for (let i = 1; i < filtered.length; i++) {
-              const prev = filtered[i-1];
-              const curr = filtered[i];
-              const tramo1 = `${prev}-${curr}`;
-              const tramo2 = `${curr}-${prev}`;
-              if (!omitPairs.includes(tramo1) && !omitPairs.includes(tramo2)) {
-                newFiltered.push(curr);
-              }
-            }
-            filtered = newFiltered;
-          }
-          document.getElementById('citySequenceSpan').innerHTML = filtered.map((c, i) => i < filtered.length-1 ? `${c} <span class=\"fa fa-angle-double-right\"></span>` : c).join(' ');
+          const rutaSel = document.getElementById('changeRouteRuta');
+          updateCiudadesPorRuta(rutaSel.value, omitCities, omitPairs);
         };
         $('#changeRouteSkipCities').on('change', rerenderOrganigram);
         $('#changeRouteSkipPairs').on('change', rerenderOrganigram);
         // Log para depuración
         console.log('Eventos de cambio de omisión de ciudades y tramos configurados');
+        // --- NUEVO: Actualizar todo al cambiar origen/destino ---
+        $('#changeRouteOrigin, #changeRouteDestination').off('change').on('change', function() {
+          // Al cambiar origen o destino, actualizar secuencia, omitidas, tramos y organigrama
+          const rutaSel = document.getElementById('changeRouteRuta');
+          const omitidas = $('#changeRouteSkipCities').val() || [];
+          const omitPairs = $('#changeRouteSkipPairs').val() || [];
+          updateCiudadesPorRuta(rutaSel.value, omitidas, omitPairs);
+        });
+        // --- FIN NUEVO ---
       }
     }, 200);
     
@@ -168,7 +331,8 @@ class ChangeRouteHandler {
     
     // Render organigrama inicial
     setTimeout(() => {
-      this.renderRouteOrganigram(serviceData, [], []);
+      const rutaSel = document.getElementById('changeRouteRuta');
+      updateCiudadesPorRuta(rutaSel.value);
     }, 100);
     
     // Configurar eventos de tabs
@@ -221,18 +385,11 @@ class ChangeRouteHandler {
           // Obtener la secuencia de ciudades actual (después de omisiones)
           const citySequenceSpan = document.getElementById('citySequenceSpan');
           if (citySequenceSpan) {
-            // Extraer solo los nombres de ciudad, ignorando los íconos y separadores
-            // Usar querySelectorAll para obtener solo los nodos de texto
+            // Extraer los nombres de ciudad de los spans con la clase 'badge'
             let cities = [];
-            citySequenceSpan.childNodes.forEach(node => {
-              if (node.nodeType === Node.TEXT_NODE) {
-                // Puede haber varios nombres juntos, separarlos por espacios
-                node.textContent.split(/\s+/).forEach(c => {
-                  if (c && c.trim()) cities.push(c.trim());
-                });
-              } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN') {
-                // ignorar los <span> (son los íconos)
-              }
+            citySequenceSpan.querySelectorAll('span.badge').forEach(span => {
+              const name = span.textContent.trim();
+              if (name) cities.push(name);
             });
             this.citySequence = cities;
             console.log('Secuencia de ciudades:', this.citySequence);
@@ -313,14 +470,17 @@ class ChangeRouteHandler {
     let { tiemposPorCiudad, tiempoTotal } = this.calcularTiempos(embarqueInicial);
     let html = '';
     html += `<div class="container-fluid px-0" style="font-size:0.70rem;">`;
-    html += `<div class="row mb-2"><div class="col-12 d-flex align-items-center justify-content-between">`;
-    html += `<h6 class="fw-normal mb-0" style="font-size:0.70rem;letter-spacing:0.2px;">Etapas de la Ruta</h6>`;
-    html += `<span class="badge bg-primary shadow-sm" style="font-size:0.70rem;padding:5px 8px;">Tiempo total: <b>${tiempoTotal} hrs</b></span>`;
-    html += `</div></div>`;
-    html += `<div class="row mb-2"><div class="col-12 d-flex align-items-center">`;
-    html += `<label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Embarque inicial</label>`;
-    html += `<div class="d-flex align-items-center mb-2">`;
-    html += `<select id="embarqueH" class="form-select form-select-sm d-inline-block text-center" style="width:48px;padding:2px 4px;">`;
+    html += `<div class="row mb-2">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h6 class="fw-normal mb-0" style="font-size:0.70rem;letter-spacing:0.2px;">Etapas de la Ruta</h6>
+        <span class="badge bg-primary shadow-sm" style="font-size:0.70rem;padding:5px 8px;">Tiempo total: <b>${tiempoTotal} hrs</b></span>
+      </div>
+    </div>`;
+    html += `<div class="row mb-2">
+      <div class="col-12 d-flex flex-row-reverse align-items-start">
+        <div class="ms-2 d-flex align-items-center" style="min-width:220px;">
+          <label class="form-label text-uppercase text-muted mb-0 me-2" style="font-size:12px;letter-spacing:1px;">Embarque inicial</label>`;
+    html += `<select id="embarqueH" class="form-select form-select-sm d-inline-block text-center me-1" style="width:48px;padding:2px 4px;">`;
     for(let h=0; h<24; h++) {
       let hStr = h.toString().padStart(2,'0');
       html += `<option value="${hStr}"${embarqueH==hStr?' selected':''}>${hStr}</option>`;
@@ -333,7 +493,8 @@ class ChangeRouteHandler {
     }
     html += `</select>`;
     html += `</div>`;
-    html += `</div></div>`;
+    html += `</div>`;
+    html += `</div>`;
     html += `<div class="etapas-list accordion" id="accordionCiudades">`;
     Object.entries(this.etapasPorCiudad).forEach(([city, etapas], cidx) => {
       const collapseId = `collapseCiudad${cidx}`;
@@ -745,7 +906,7 @@ class ChangeRouteHandler {
                         <div class="row g-3 mt-1">
                           <div class="col-md-12">
                             <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Secuencia de ciudades</label>
-                            <div id="citySequenceSpan" class="fw-semibold text-dark bg-light border-0 rounded-3 px-3 py-2 fs-13" style="font-size:13px;">${allCities.join(' <span class=\"fa fa-angle-double-right\"></span> ')}</div>
+                            <div id="citySequenceSpan" class="d-flex flex-wrap align-items-center px-0 py-2 fs-13" style="font-size:13px;gap:0.5rem 0.25rem;"></div>
                           </div>
                         </div>
                         <div class="row g-3 mt-1">
@@ -782,65 +943,53 @@ class ChangeRouteHandler {
     `;
   }
 
-  renderRouteOrganigram(serviceData, omitCities = [], omitPairs = []) {
+  renderRouteOrganigram(serviceData, omitCities = [], omitPairs = [], filteredCities = null) {
     const organigram = document.getElementById('changeRouteOrganigram');
     if (!organigram) return;
-    
-    // Ejemplo de datos (puedes reemplazar por los reales)
-    const treeData = [
-      {
-        ciudad: 'Arica', etapas: 2, hijos: [
-          { ciudad: 'Algarrobo', etapas: 1 },
-          { ciudad: 'Calama', etapas: 1 },
-          { ciudad: 'Antofagasta', etapas: 1 }
-        ]
-      },
-      {
-        ciudad: 'Calama', etapas: 1, hijos: [
-          { ciudad: 'Antofagasta', etapas: 1 },
-          { ciudad: 'Algarrobo', etapas: 1 }
-        ]
-      },
-      {
-        ciudad: 'Antofagasta', etapas: 1, hijos: [
-          { ciudad: 'Algarrobo', etapas: 1 }
-        ]
+    // --- Persistencia de estado expandido ---
+    let expandedState = {};
+    const prevAccordion = document.getElementById('routeMapAccordion');
+    if (prevAccordion) {
+      prevAccordion.querySelectorAll('.accordion-collapse').forEach(acc => {
+        if (acc.classList.contains('show')) {
+          expandedState[acc.id] = true;
+        }
+      });
+    }
+    // Obtener la secuencia filtrada (solo ciudades válidas entre origen y destino, sin omitidas)
+    const cities = filteredCities || getCurrentRouteCities().filter(c => !omitCities.includes(c));
+    // Construir estructura de nodos: para cada ciudad, hijos = solo los destinos posteriores en la secuencia
+    let treeData = cities.map((ciudad, idx) => {
+      let hijos = [];
+      for (let j = idx + 1; j < cities.length; j++) {
+        const par1 = `${ciudad}-${cities[j]}`;
+        const par2 = `${cities[j]}-${ciudad}`;
+        if (!omitPairs.includes(par1) && !omitPairs.includes(par2)) {
+          hijos.push({ ciudad: cities[j] });
+        }
       }
-    ];
-    
-    // Filtrar ciudades principales omitidas
-    const filteredTree = treeData.filter(nodo => !omitCities.includes(nodo.ciudad));
-    
+      return { ciudad, hijos };
+    });
     organigram.innerHTML = `
       <div class="route-map-tree-main" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;">
         <div class="card-body p-0" style="background:transparent;">
           <div class="stages-accordion-container accordion" id="routeMapAccordion">
-            <div class="px-3 pt-3 pb-2 border-bottom" style="background:transparent;font-weight:600;font-size:15px;color:#222;">Mapa de ruta <span style="font-weight:400;font-size:13px;color:#666;">(4 Ciudades, 6 Tramo, 5 Etapas)</span></div>
-            <div class="px-3 pt-2 pb-2" style="background:transparent;font-size:13px;color:#2563eb;cursor:pointer;user-select:none;" id="expandCollapseAllBtn">
-              <span class="me-2"><i class="fas fa-caret-right"></i></span><span id="expandCollapseAllText">Expandir todos</span>
-            </div>
-            ${filteredTree.map((nodo, idx) => {
-              // Filtrar hijos omitidos por ciudad y por par (tramo)
-              const hijosFiltrados = nodo.hijos.filter(hijo => {
-                if (omitCities.includes(hijo.ciudad)) return false;
-                // Tramo: ciudad principal - hijo
-                const par1 = `${nodo.ciudad}-${hijo.ciudad}`;
-                const par2 = `${hijo.ciudad}-${nodo.ciudad}`;
-                return !omitPairs.includes(par1) && !omitPairs.includes(par2);
-              });
-              if (hijosFiltrados.length === 0) return '';
+            <div class="px-3 pt-3 pb-2 border-bottom" style="background:transparent;font-weight:600;font-size:15px;color:#222;">Mapa de ruta <span style="font-weight:400;font-size:13px;color:#666;">(${cities.length} Ciudades, ${cities.length-1} Tramos)</span></div>
+            ${treeData.map((nodo, idx) => {
+              if (nodo.hijos.length === 0) return '';
               const headingId = `headingOrganigram${idx}`;
+              const collapseId = `collapse${idx}`;
               return `
               <div class="accordion-item" style="background:transparent;border:none;">
                 <h2 class="stages-accordion-header accordion-header" id="${headingId}">
-                  <button type="button" aria-expanded="false" class="accordion-button collapsed justify-content-start" data-bs-toggle="collapse" data-bs-target="#collapse${idx}" aria-controls="collapse${idx}" style="background:#f9fafb;color:#222;font-size:13px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;">
+                  <button type="button" aria-expanded="false" class="accordion-button collapsed justify-content-start" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-controls="${collapseId}" style="background:#f9fafb;color:#222;font-size:13px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;">
                     <span class="w-30-px"><i class="fas fa-caret-right me-2" style="color:#888;"></i></span>
                     <span style="font-size:13px;">${nodo.ciudad}</span>
                   </button>
                 </h2>
-                <div id="collapse${idx}" class="accordion-collapse collapse" aria-labelledby="${headingId}">
+                <div id="${collapseId}" class="accordion-collapse collapse${expandedState[`collapse${idx}`] ? ' show' : ''}" aria-labelledby="${headingId}">
                   <div class="pd-0 accordion-body" style="background:#fff;">
-                    ${hijosFiltrados.map(hijo => `
+                    ${nodo.hijos.map(hijo => `
                       <div class="list-item d-flex align-items-center" style="font-size:13px;">
                         <span class="me-2" style="color:#bbb;font-size:15px;">&#8226;</span>
                         <div class="pd-x-25 mg-l-15 flex-grow-1" style="font-size:13px;">${hijo.ciudad}</div>
@@ -855,7 +1004,6 @@ class ChangeRouteHandler {
         </div>
       </div>
     `;
-    
     // Funcionalidad expandir/colapsar todos
     setTimeout(() => {
       const expandBtn = document.getElementById('expandCollapseAllBtn');
