@@ -102,7 +102,7 @@ class ChangeRouteHandler {
           }
         }
         const nuevos = (omitPairs || []).filter(par => pairs.includes(par));
-        skipPairsSel.innerHTML = pairs.map(p => `<option value=\"${p}\"${nuevos.includes(p)?' selected':''}>${p.replace(/-/g, ' - ')}</option>`).join('');
+        skipPairsSel.innerHTML = pairs.map(p => `<option value="${p}">${p.replace(/-/g, ' - ')}</option>`).join('');
         $(skipPairsSel).val(nuevos).trigger('change.select2');
       }
       // Actualizar secuencia de ciudades (solo depende de omitidas)
@@ -160,6 +160,31 @@ class ChangeRouteHandler {
             destSel.value = allCities[allCities.length-1];
           }
           updateCiudadesPorRuta(e.target.value, [], []);
+          // Actualizar selects de la web
+          const skipCitiesWeb = document.getElementById('changeRouteSkipCitiesWeb');
+          const skipPairsWeb = document.getElementById('changeRouteSkipPairsWeb');
+          if (skipCitiesWeb && skipPairsWeb) {
+            // Guardar selección previa
+            const prevCities = Array.from(skipCitiesWeb.selectedOptions).map(opt => opt.value);
+            const prevPairs = Array.from(skipPairsWeb.selectedOptions).map(opt => opt.value);
+            // Actualizar opciones
+            skipCitiesWeb.innerHTML = allCities.slice(1, -1).map(c => `<option value="${c}">${c}</option>`).join('');
+            let pairs = [];
+            for (let i = 0; i < allCities.length; i++) {
+              for (let j = i + 1; j < allCities.length; j++) {
+                pairs.push(`${allCities[i]}-${allCities[j]}`);
+              }
+            }
+            skipPairsWeb.innerHTML = pairs.map(p => `<option value="${p}">${p.replace(/-/g, ' - ')}</option>`).join('');
+            // Restaurar selección previa si es posible
+            prevCities.forEach(val => { if (allCities.includes(val)) skipCitiesWeb.querySelector(`option[value='${val}']`)?.setAttribute('selected','selected'); });
+            prevPairs.forEach(val => { if (pairs.includes(val)) skipPairsWeb.querySelector(`option[value='${val}']`)?.setAttribute('selected','selected'); });
+            // Refrescar Select2
+            if (window.$ && window.$.fn && window.$.fn.select2) {
+              $('#changeRouteSkipCitiesWeb').trigger('change.select2');
+              $('#changeRouteSkipPairsWeb').trigger('change.select2');
+            }
+          }
         });
         // Inicializar según la ruta actual
         const allCities = rutasCiudades[rutaSel.value] || rutasCiudades['Autopista X Pardo'];
@@ -179,14 +204,6 @@ class ChangeRouteHandler {
     // Inicializar Select2 en los selects múltiples
     setTimeout(() => {
       if (window.$ && window.$.fn && window.$.fn.select2) {
-        function templateResultHideSelected(state, selected) {
-          if (!state.id) return state.text;
-          if (selected && selected.includes(state.id)) return null;
-          return state.text;
-        }
-        function getSelectedValues(selectId) {
-          return $(selectId).val() || [];
-        }
         $('#changeRouteSkipCities').select2({
           theme: 'bootstrap-5',
           dropdownParent: $('#changeRouteModal'),
@@ -194,94 +211,7 @@ class ChangeRouteHandler {
           width: '100%',
           allowClear: true,
           closeOnSelect: true,
-          tags: false,
-          templateResult: function(state) {
-            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipCities'));
-          },
-          templateSelection: function(state) {
-            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipCities'));
-          }
-        }).on('change', function() {
-          const omitidas = $(this).val() || [];
-          const paresSelect = $('#changeRouteSkipPairs');
-          // SIEMPRE usar el rango entre origen y destino seleccionados
-          const originSel = document.getElementById('changeRouteOrigin');
-          const destSel = document.getElementById('changeRouteDestination');
-          const origen = originSel.value;
-          const destino = destSel.value;
-          // Buscar la ruta base solo para saber el orden
-          const rutaSel = document.getElementById('changeRouteRuta');
-          const allCities = rutasCiudades[rutaSel?.value] || rutasCiudades['Autopista X Pardo'];
-          const idxOrigen = allCities.indexOf(origen);
-          const idxDestino = allCities.indexOf(destino);
-          let secuenciaRango = [];
-          if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen < idxDestino) {
-            secuenciaRango = allCities.slice(idxOrigen, idxDestino + 1);
-          } else if (idxOrigen !== -1 && idxDestino !== -1 && idxOrigen > idxDestino) {
-            secuenciaRango = allCities.slice(idxDestino, idxOrigen + 1).reverse();
-          }
-          // Remover de omitidas cualquier ciudad fuera de la secuencia
-          const omitidasFiltradas = omitidas.filter(c => secuenciaRango.includes(c));
-          // Actualizar selects de omitidas
-          $('#changeRouteSkipCities').empty();
-          secuenciaRango.slice(1, -1).forEach(ciudad => {
-            if (omitidasFiltradas.includes(ciudad)) {
-              $('#changeRouteSkipCities').append(`<option value="${ciudad}" selected>${ciudad}</option>`);
-            } else {
-              $('#changeRouteSkipCities').append(`<option value="${ciudad}">${ciudad}</option>`);
-            }
-          });
-          setTimeout(() => {
-            $('#changeRouteSkipCities').val(omitidasFiltradas).trigger('change.select2');
-          }, 0);
-          // Actualizar pares de tramos
-          const ciudadesValidas = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
-          const pares = [];
-          for (let i = 0; i < ciudadesValidas.length; i++) {
-            for (let j = i + 1; j < ciudadesValidas.length; j++) {
-              pares.push(`${ciudadesValidas[i]}-${ciudadesValidas[j]}`);
-            }
-          }
-          const paresSeleccionados = paresSelect.val() || [];
-          paresSelect.empty();
-          pares.forEach(par => {
-            paresSelect.append(`<option value="${par}">${par.replace(/-/g, ' - ')}</option>`);
-          });
-          const nuevos = paresSeleccionados.filter(par => pares.includes(par));
-          paresSelect.val(nuevos).trigger('change.select2');
-          // Actualizar secuencia de ciudades
-          let filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
-          const seqSpan = document.getElementById('citySequenceSpan');
-          if (seqSpan) {
-            seqSpan.className = 'd-flex flex-row align-items-center flex-wrap gap-2';
-            seqSpan.innerHTML = filtered.map((c, i) => `
-              <span class='badge bg-secondary me-2 mb-1' style='font-size:13px;'>${c}</span>
-              ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
-            `).join('');
-          }
-          // Actualizar selects de origen/destino (mantener el valor seleccionado si es posible)
-          if (originSel && destSel) {
-            const currentOrigin = originSel.value;
-            const currentDest = destSel.value;
-            originSel.innerHTML = filtered.map(c => `<option value="${c}">${c}</option>`).join('');
-            destSel.innerHTML = filtered.map(c => `<option value="${c}">${c}</option>`).join('');
-            if (filtered.includes(currentOrigin)) {
-              originSel.value = currentOrigin;
-            } else if (filtered.length > 0) {
-              originSel.value = filtered[0];
-            }
-            if (filtered.includes(currentDest)) {
-              destSel.value = currentDest;
-            } else if (filtered.length > 0) {
-              destSel.value = filtered[filtered.length-1];
-            }
-          }
-          // Actualizar organigrama
-          setTimeout(() => {
-            if (window.changeRouteHandler && typeof window.changeRouteHandler.renderRouteOrganigram === 'function') {
-              window.changeRouteHandler.renderRouteOrganigram({}, omitidasFiltradas, nuevos, filtered);
-            }
-          }, 100);
+          tags: false
         });
         $('#changeRouteSkipPairs').select2({
           theme: 'bootstrap-5',
@@ -290,56 +220,33 @@ class ChangeRouteHandler {
           width: '100%',
           allowClear: true,
           closeOnSelect: true,
-          tags: false,
-          templateResult: function(state) {
-            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipPairs'));
-          },
-          templateSelection: function(state) {
-            return templateResultHideSelected(state, getSelectedValues('#changeRouteSkipPairs'));
+          tags: false
+        });
+        // Llenar opciones igual que los campos originales
+        const rutaSel = document.getElementById('changeRouteRuta');
+        const allCities = rutasCiudades[rutaSel?.value] || rutasCiudades['Autopista X Pardo'];
+        // Ciudades web (sin origen/destino)
+        $('#changeRouteSkipCitiesWeb').html(allCities.slice(1, -1).map(c => `<option value="${c}">${c}</option>`).join(''));
+        // Tramos web
+        let pairs = [];
+        for (let i = 0; i < allCities.length; i++) {
+          for (let j = i + 1; j < allCities.length; j++) {
+            pairs.push(`${allCities[i]}-${allCities[j]}`);
           }
-        }).on('select2:select select2:unselect', function() {
-          $(this).trigger('change.select2');
-        });
-        
-        const rerenderOrganigram = () => {
-          const omitCities = $('#changeRouteSkipCities').val() || [];
-          const omitPairs = $('#changeRouteSkipPairs').val() || [];
-          const rutaSel = document.getElementById('changeRouteRuta');
-          updateCiudadesPorRuta(rutaSel.value, omitCities, omitPairs);
-        };
-        $('#changeRouteSkipCities').on('change', rerenderOrganigram);
-        $('#changeRouteSkipPairs').on('change', rerenderOrganigram);
-        // Log para depuración
-        console.log('Eventos de cambio de omisión de ciudades y tramos configurados');
-        // --- NUEVO: Actualizar todo al cambiar origen/destino ---
-        $('#changeRouteOrigin, #changeRouteDestination').off('change').on('change', function() {
-          // Al cambiar origen o destino, actualizar secuencia, omitidas, tramos y organigrama
-          const rutaSel = document.getElementById('changeRouteRuta');
-          const omitidas = $('#changeRouteSkipCities').val() || [];
-          const omitPairs = $('#changeRouteSkipPairs').val() || [];
-          updateCiudadesPorRuta(rutaSel.value, omitidas, omitPairs);
-        });
-        // --- FIN NUEVO ---
+        }
+        $('#changeRouteSkipPairsWeb').html(pairs.map(p => `<option value="${p}">${p.replace(/-/g, ' - ')}</option>`).join(''));
       }
-    }, 200);
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('changeRouteModal'));
-    modal.show();
-    
-    // Render organigrama inicial
-    setTimeout(() => {
-      const rutaSel = document.getElementById('changeRouteRuta');
-      updateCiudadesPorRuta(rutaSel.value);
-    }, 100);
-    
-    // Configurar eventos de tabs
-    this.setupTabEvents();
-    
-    // Configurar botones
-    this.setupButtons();
+    }, 400);
 
-    // --- Opciones de rutas para el select ---
+    // Después de document.body.insertAdjacentHTML('beforeend', modalHtml);
+    setTimeout(() => {
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const modal = new bootstrap.Modal(document.getElementById('changeRouteModal'));
+        modal.show();
+      }
+    }, 0);
+
+    // 2. Al abrir el modal, aseguro que el select de rutas siempre tenga las opciones:
     setTimeout(() => {
       const rutas = ['Autopista X Pardo', 'Ruta 2', 'Ruta 3', 'Ruta 4'];
       const rutaSel = document.getElementById('changeRouteRuta');
@@ -351,31 +258,51 @@ class ChangeRouteHandler {
       }
     }, 10);
 
-    // --- Mover SERVICIO arriba, junto a las pestañas ---
-    // Busca el bloque de las tabs y agrega el nombre del servicio a la derecha
-    const modalHeaderTabs = document.querySelector('#changeRouteTabs');
-    if (modalHeaderTabs) {
-      const servicioInfo = document.createElement('div');
-      servicioInfo.className = 'd-flex align-items-center justify-content-end';
-      servicioInfo.style = 'position:absolute;top:0;right:2.5rem;height:100%;z-index:2;';
-      servicioInfo.innerHTML = `
-        <div style="display:flex;flex-direction:row;align-items:center;justify-content:flex-end;width:220px;">
-          <label class="form-label text-uppercase text-muted mb-0 me-2" style="font-size:12px;letter-spacing:1px;">Servicio</label>
-          <input type="text" class="form-control form-control-sm" value="${serviceData.numero}" readonly style="background-color:#f8f9fa !important;border-color:#e9ecef !important;color:#6c757d !important;cursor:not-allowed !important;min-width:180px;max-width:220px;font-weight:600;">
-        </div>
-      `;
-      modalHeaderTabs.parentElement.style.position = 'relative';
-      modalHeaderTabs.parentElement.appendChild(servicioInfo);
-    }
-    // --- FIN mover SERVICIO ---
+    // Después de inicializar Select2 en los selects antiguos, inicializo también en los nuevos:
+    $('#changeRouteSkipCitiesWeb').select2({
+      theme: 'bootstrap-5',
+      dropdownParent: $('#changeRouteModal'),
+      placeholder: 'Selecciona ciudades...',
+      width: '100%',
+      allowClear: true,
+      closeOnSelect: true,
+      tags: false
+    });
+    $('#changeRouteSkipPairsWeb').select2({
+      theme: 'bootstrap-5',
+      dropdownParent: $('#changeRouteModal'),
+      placeholder: 'Selecciona pares de ciudades...',
+      width: '100%',
+      allowClear: true,
+      closeOnSelect: true,
+      tags: false
+    });
 
-    // --- Reducir ancho de selects de omisión ---
-    setTimeout(() => {
-      const skipCities = document.getElementById('changeRouteSkipCities');
-      const skipPairs = document.getElementById('changeRouteSkipPairs');
-      if (skipCities) skipCities.style.maxWidth = '160px';
-      if (skipPairs) skipPairs.style.maxWidth = '160px';
-    }, 400);
+    // Después de inicializar Select2 en los selects antiguos:
+    $('#changeRouteSkipCities').on('change', function() {
+      const omitidas = $(this).val() || [];
+      const omitPairs = $('#changeRouteSkipPairs').val() || [];
+      const rutaSel = document.getElementById('changeRouteRuta');
+      updateCiudadesPorRuta(rutaSel.value, omitidas, omitPairs);
+    });
+    $('#changeRouteSkipPairs').on('change', function() {
+      const omitidas = $('#changeRouteSkipCities').val() || [];
+      const omitPairs = $(this).val() || [];
+      const rutaSel = document.getElementById('changeRouteRuta');
+      updateCiudadesPorRuta(rutaSel.value, omitidas, omitPairs);
+    });
+
+    // Después de setear los listeners de cambio de ruta y origen, agrego:
+    document.getElementById('changeRouteDestination')?.addEventListener('change', function() {
+      const rutaSel = document.getElementById('changeRouteRuta');
+      const omitidas = $('#changeRouteSkipCities').val() || [];
+      const omitPairs = $('#changeRouteSkipPairs').val() || [];
+      updateCiudadesPorRuta(rutaSel.value, omitidas, omitPairs);
+    });
+
+    // Después de mostrar el modal (modal.show()), agrego:
+    this.setupTabEvents();
+    this.setupButtons();
   }
 
   setupTabEvents() {
@@ -556,7 +483,7 @@ class ChangeRouteHandler {
         }else{
           html += `<td class="text-center fw-normal" style="width:180px;white-space:nowrap;">${etapa.nombre}</td>`;
         }
-        html += `<td><input type="text" class="form-control form-control-sm text-center etapa-distancia input-distancia" value="${etapa.distancia}" size="4"></td>`;
+        html += `<td><input type="text" class="form-control form-control-sm text-center etapa-distancia input-distancia" style="max-width:60px;padding:2px 4px;" value="${etapa.distancia}" size="4"></td>`;
         html += `<td>`;
         // Duración: si es la primera ciudad y la primera etapa, mostrar 00:00 fijo y deshabilitado
         if (cidx === 0 && eidx === 0) {
@@ -898,14 +825,20 @@ class ChangeRouteHandler {
                               <select id="changeRouteDestination" class="form-select"></select>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label">Ciudades omitidas</label>
-                              <select id="changeRouteSkipCities" class="form-select" multiple></select>
-                              <small class="text-muted">Puedes seleccionar varias ciudades</small>
+                              <label class="form-label">Omitir Ciudades</label>
+                              <select id="changeRouteSkipCities" multiple></select>
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Omitir tramos</label>
-                              <select id="changeRouteSkipPairs" class="form-select" multiple></select>
-                              <small class="text-muted">Puedes seleccionar varios pares de ciudades</small>
+                              <select id="changeRouteSkipPairs" multiple></select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Omitir ciudades de la web</label>
+                              <select id="changeRouteSkipCitiesWeb" multiple></select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Omitir tramos de la web</label>
+                              <select id="changeRouteSkipPairsWeb" multiple></select>
                             </div>
                           </div>
                           <div class="col-md-8">
