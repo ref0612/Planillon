@@ -350,6 +350,32 @@ class ChangeRouteHandler {
         }
       }
     }, 10);
+
+    // --- Mover SERVICIO arriba, junto a las pestañas ---
+    // Busca el bloque de las tabs y agrega el nombre del servicio a la derecha
+    const modalHeaderTabs = document.querySelector('#changeRouteTabs');
+    if (modalHeaderTabs) {
+      const servicioInfo = document.createElement('div');
+      servicioInfo.className = 'd-flex align-items-center justify-content-end';
+      servicioInfo.style = 'position:absolute;top:0;right:2.5rem;height:100%;z-index:2;';
+      servicioInfo.innerHTML = `
+        <div style="display:flex;flex-direction:row;align-items:center;justify-content:flex-end;width:220px;">
+          <label class="form-label text-uppercase text-muted mb-0 me-2" style="font-size:12px;letter-spacing:1px;">Servicio</label>
+          <input type="text" class="form-control form-control-sm" value="${serviceData.numero}" readonly style="background-color:#f8f9fa !important;border-color:#e9ecef !important;color:#6c757d !important;cursor:not-allowed !important;min-width:180px;max-width:220px;font-weight:600;">
+        </div>
+      `;
+      modalHeaderTabs.parentElement.style.position = 'relative';
+      modalHeaderTabs.parentElement.appendChild(servicioInfo);
+    }
+    // --- FIN mover SERVICIO ---
+
+    // --- Reducir ancho de selects de omisión ---
+    setTimeout(() => {
+      const skipCities = document.getElementById('changeRouteSkipCities');
+      const skipPairs = document.getElementById('changeRouteSkipPairs');
+      if (skipCities) skipCities.style.maxWidth = '160px';
+      if (skipPairs) skipPairs.style.maxWidth = '160px';
+    }, 400);
   }
 
   setupTabEvents() {
@@ -851,10 +877,6 @@ class ChangeRouteHandler {
                     </button>
                   </li>
                 </ul>
-                <div class="mt-2 mb-3">
-                  <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Servicio</label>
-                  <span class="fw-semibold bg-white border border-1 rounded-2 px-3 py-1 d-inline-block align-middle" style="font-size:15px;color:#222;min-width:180px;">${serviceData.numero}</span>
-                </div>
               </div>
               <div class="tab-content px-4 pb-4" id="changeRouteTabContent">
                 <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
@@ -862,7 +884,7 @@ class ChangeRouteHandler {
                     <div class="card-body pb-2 pt-3 px-4">
                       <form id="changeRouteForm">
                         <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <div class="mb-3">
                               <label class="form-label">Ruta</label>
                               <select id="changeRouteRuta" class="form-select"></select>
@@ -886,7 +908,7 @@ class ChangeRouteHandler {
                               <small class="text-muted">Puedes seleccionar varios pares de ciudades</small>
                             </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-8">
                             <div class="mb-3">
                               <label class="form-label">Secuencia de ciudades</label>
                               <div id="citySequenceSpan" class="mb-2"></div>

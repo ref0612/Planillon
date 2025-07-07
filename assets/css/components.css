@@ -679,3 +679,101 @@
     font-size: 12px;
   }
 }
+
+/* Cambiar Ruta - UI Mejorado (unificado y limpio) */
+.change-route-modal .form-select,
+.change-route-modal input[type="text"],
+.change-route-modal #changeRouteSkipCities,
+.change-route-modal #changeRouteSkipPairs {
+  height: 32px;
+  font-size: 13px;
+  border-radius: 7px;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s;
+  max-width: 240px;
+  min-width: 160px;
+  width: 240px;
+}
+.change-route-modal .form-select:focus,
+.change-route-modal input[type="text"]:focus {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px #ffeaea;
+}
+.change-route-modal .form-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.change-route-modal .help-icon {
+  color: #bdbdbd;
+  margin-left: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  vertical-align: middle;
+}
+#citySequenceSpan {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  scrollbar-width: thin;
+}
+#citySequenceSpan .badge {
+  margin-right: 2px;
+}
+#citySequenceSpan .fa-angle-double-right {
+  margin-right: 2px;
+}
+#nextChangeRouteBtn {
+  background: #d32f2f;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+#nextChangeRouteBtn:hover {
+  background: #b71c1c;
+}
+.change-route-modal .select2-container--bootstrap-5.select2-container {
+  max-width: 240px !important;
+  min-width: 160px !important;
+  width: 240px !important;
+}
+.change-route-modal .select2-selection--single,
+.change-route-modal .select2-selection--multiple {
+  height: 32px !important;
+  font-size: 13px !important;
+  border-radius: 7px !important;
+  padding: 2px 8px !important;
+}
+
+/* Ajustes extra para cajas de omisiones y mapa de ruta */
+.change-route-modal .mb-3 {
+  margin-bottom: 12px !important;
+}
+.change-route-modal #changeRouteSkipCities,
+.change-route-modal #changeRouteSkipPairs {
+  max-width: 120px;
+  min-width: 80px;
+  height: 32px;
+  font-size: 13px;
+  border-radius: 7px;
+  border: 1px solid #d1d5db;
+  padding: 2px 8px;
+}
+.change-route-modal #routeOrganigramContainer {
+  margin-left: 0 !important;
+}
+@media (min-width: 768px) {
+  .change-route-modal .col-md-6:last-child {
+    padding-left: 8px !important;
+  }
+}
