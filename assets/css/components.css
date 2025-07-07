@@ -777,3 +777,40 @@
     padding-left: 8px !important;
   }
 }
+
+.select-duracion {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+  padding: 2px 4px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.input-distancia {
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+  text-align: center;
+  vertical-align: middle !important;
+  display: inline-block;
+}
+
+.select-embarque {
+  width: 35px !important;
+  min-width: 35px !important;
+  max-width: 35px !important;
+  padding: 2px 4px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.change-route-modal td {
+  vertical-align: middle !important;
+  text-align: center;
+}
+
+.change-route-modal input[type="text"],
+.change-route-modal select {
+  vertical-align: middle !important;
+}

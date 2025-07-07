@@ -516,13 +516,13 @@ class ChangeRouteHandler {
       <div class="col-12 d-flex flex-row-reverse align-items-start">
         <div class="ms-2 d-flex align-items-center" style="min-width:220px;">
           <label class="form-label text-uppercase text-muted mb-0 me-2" style="font-size:12px;letter-spacing:1px;">Embarque inicial</label>`;
-    html += `<select id="embarqueH" class="form-select form-select-sm d-inline-block text-center me-1" style="width:48px;padding:2px 4px;">`;
+    html += `<select id="embarqueH" class="form-select form-select-sm d-inline-block text-center me-1 select-embarque" style="width:48px;padding:2px 4px;">`;
     for(let h=0; h<24; h++) {
       let hStr = h.toString().padStart(2,'0');
       html += `<option value="${hStr}"${embarqueH==hStr?' selected':''}>${hStr}</option>`;
     }
     html += `</select> : `;
-    html += `<select id="embarqueM" class="form-select form-select-sm d-inline-block text-center" style="width:48px;padding:2px 4px;">`;
+    html += `<select id="embarqueM" class="form-select form-select-sm d-inline-block text-center select-embarque" style="width:48px;padding:2px 4px;">`;
     for(let m=0; m<60; m++) {
       let mStr = m.toString().padStart(2,'0');
       html += `<option value="${mStr}"${embarqueM==mStr?' selected':''}>${mStr}</option>`;
@@ -556,20 +556,20 @@ class ChangeRouteHandler {
         }else{
           html += `<td class="text-center fw-normal" style="width:180px;white-space:nowrap;">${etapa.nombre}</td>`;
         }
-        html += `<td><input type="text" class="form-control form-control-sm text-center etapa-distancia" style="max-width:60px;padding:2px 4px;" value="${etapa.distancia}" size="4"></td>`;
+        html += `<td><input type="text" class="form-control form-control-sm text-center etapa-distancia input-distancia" value="${etapa.distancia}" size="4"></td>`;
         html += `<td>`;
         // Duración: si es la primera ciudad y la primera etapa, mostrar 00:00 fijo y deshabilitado
         if (cidx === 0 && eidx === 0) {
-          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-dur-h' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select> : `;
-          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-dur-m' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select>`;
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-dur-h select-duracion' style='width:38px;padding:2px 4px;' disabled><option value='00' selected>00</option></select> : `;
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-dur-m select-duracion' style='width:38px;padding:2px 4px;' disabled><option value='00' selected>00</option></select>`;
         } else {
-          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-dur-h" style="width:48px;padding:2px 4px;">`;
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-dur-h select-duracion" style="width:38px;padding:2px 4px;">`;
           for(let h=0; h<24; h++) {
             let hStr = h.toString().padStart(2,'0');
             html += `<option value="${hStr}"${etapa.duracionH==hStr?' selected':''}>${hStr}</option>`;
           }
           html += `</select> : `;
-          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-dur-m" style="width:48px;padding:2px 4px;">`;
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-dur-m select-duracion" style="width:38px;padding:2px 4px;">`;
           for(let m=0; m<60; m++) {
             let mStr = m.toString().padStart(2,'0');
             html += `<option value="${mStr}"${etapa.duracionM==mStr?' selected':''}>${mStr}</option>`;
@@ -579,16 +579,16 @@ class ChangeRouteHandler {
         html += `</td>`;
         html += `<td>`;
         if (cidx === Object.entries(this.etapasPorCiudad).length - 1 && eidx === etapas.length - 1) {
-          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-h' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select> : `;
-          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-m' style='width:48px;padding:2px 4px;' disabled><option value='00' selected>00</option></select>`;
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-h select-duracion' style='width:38px;padding:2px 4px;' disabled><option value='00' selected>00</option></select> : `;
+          html += `<select class='form-select form-select-sm d-inline-block text-center etapa-esp-m select-duracion' style='width:38px;padding:2px 4px;' disabled><option value='00' selected>00</option></select>`;
         } else {
-          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-h" style="width:48px;padding:2px 4px;">`;
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-h select-duracion" style="width:38px;padding:2px 4px;">`;
           for(let h=0; h<24; h++) {
             let hStr = h.toString().padStart(2,'0');
             html += `<option value="${hStr}"${etapa.esperaH==hStr?' selected':''}>${hStr}</option>`;
           }
           html += `</select> : `;
-          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-m" style="width:48px;padding:2px 4px;">`;
+          html += `<select class="form-select form-select-sm d-inline-block text-center etapa-esp-m select-duracion" style="width:38px;padding:2px 4px;">`;
           for(let m=0; m<60; m++) {
             let mStr = m.toString().padStart(2,'0');
             html += `<option value="${mStr}"${etapa.esperaM==mStr?' selected':''}>${mStr}</option>`;
