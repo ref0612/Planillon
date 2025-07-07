@@ -109,11 +109,10 @@ class ChangeRouteHandler {
       filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
       const seqSpan = document.getElementById('citySequenceSpan');
       if (seqSpan) {
+        seqSpan.className = 'd-flex flex-row align-items-center flex-wrap gap-2';
         seqSpan.innerHTML = filtered.map((c, i) => `
-          <div class='d-flex align-items-center'>
-            <span class='badge bg-secondary me-2' style='font-size:13px;'>${c}</span>
-            ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
-          </div>
+          <span class='badge bg-secondary me-2 mb-1' style='font-size:13px;'>${c}</span>
+          ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
         `).join('');
       }
       // Actualizar selects de origen/destino
@@ -254,11 +253,10 @@ class ChangeRouteHandler {
           let filtered = secuenciaRango.filter(c => !omitidasFiltradas.includes(c));
           const seqSpan = document.getElementById('citySequenceSpan');
           if (seqSpan) {
+            seqSpan.className = 'd-flex flex-row align-items-center flex-wrap gap-2';
             seqSpan.innerHTML = filtered.map((c, i) => `
-              <div class='d-flex align-items-center'>
-                <span class='badge bg-secondary me-2' style='font-size:13px;'>${c}</span>
-                ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
-              </div>
+              <span class='badge bg-secondary me-2 mb-1' style='font-size:13px;'>${c}</span>
+              ${i < filtered.length-1 ? "<span class='fa fa-angle-double-right text-muted me-2'></span>" : ''}
             `).join('');
           }
           // Actualizar selects de origen/destino (mantener el valor seleccionado si es posible)
@@ -340,6 +338,18 @@ class ChangeRouteHandler {
     
     // Configurar botones
     this.setupButtons();
+
+    // --- Opciones de rutas para el select ---
+    setTimeout(() => {
+      const rutas = ['Autopista X Pardo', 'Ruta 2', 'Ruta 3', 'Ruta 4'];
+      const rutaSel = document.getElementById('changeRouteRuta');
+      if (rutaSel) {
+        rutaSel.innerHTML = rutas.map(r => `<option value="${r}"${serviceData.variante === r ? ' selected' : ''}>${r}</option>`).join('');
+        if (!rutas.includes(serviceData.variante)) {
+          rutaSel.value = rutas[0];
+        }
+      }
+    }, 10);
   }
 
   setupTabEvents() {
@@ -851,67 +861,40 @@ class ChangeRouteHandler {
                   <div class="card mb-3" style="border-radius:14px;background:#f8f9fb;border:none;">
                     <div class="card-body pb-2 pt-3 px-4">
                       <form id="changeRouteForm">
-                        <div class="row g-3 align-items-end">
-                          <div class="col-md-4">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Ruta</label>
-                            <select class="form-select form-select-sm fw-semibold fs-13" style="font-size:13px;background:#fff;cursor:pointer;border:1px solid #d1d5db;" id="changeRouteRuta">
-                              <option value="Autopista X Pardo" ${serviceData.variante === 'Autopista X Pardo' ? 'selected' : ''}>Autopista X Pardo</option>
-                              <option value="Ruta 2" ${serviceData.variante === 'Ruta 2' ? 'selected' : ''}>Ruta 2</option>
-                              <option value="Ruta 3" ${serviceData.variante === 'Ruta 3' ? 'selected' : ''}>Ruta 3</option>
-                              <option value="Ruta 4" ${serviceData.variante === 'Ruta 4' ? 'selected' : ''}>Ruta 4</option>
-                            </select>
-                          </div>
-                          <div class="col-md-4">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Origen</label>
-                            <select class="form-select form-select-sm fw-semibold fs-13" style="font-size:13px;background:#fff;cursor:pointer;border:1px solid #d1d5db;" id="changeRouteOrigin">
-                              <option value="Arica">Arica</option>
-                              <option value="Calama">Calama</option>
-                              <option value="Antofagasta">Antofagasta</option>
-                              <option value="Algarrobo">Algarrobo</option>
-                            </select>
-                          </div>
-                          <div class="col-md-4">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Destino</label>
-                            <select class="form-select form-select-sm fw-semibold fs-13" style="font-size:13px;background:#fff;cursor:pointer;border:1px solid #d1d5db;" id="changeRouteDestination">
-                              <option value="Arica">Arica</option>
-                              <option value="Calama">Calama</option>
-                              <option value="Antofagasta">Antofagasta</option>
-                              <option value="Algarrobo">Algarrobo</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="row g-3 mt-1 align-items-end">
+                        <div class="row">
                           <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Ciudades omitidas</label>
-                            <select class="form-select form-select-sm select2-multi fw-semibold fs-13" style="font-size:13px;background:#fff;cursor:pointer;border:1px solid #d1d5db;" id="changeRouteSkipCities" multiple data-placeholder="Selecciona ciudades...">
-                              <option value="Calama">Calama</option>
-                              <option value="Antofagasta">Antofagasta</option>
-                              <option value="Viña del Mar">Viña del Mar</option>
-                              <option value="Valparaíso">Valparaíso</option>
-                            </select>
-                            <div class="helper-text fs-10 mg-l-5">Puedes seleccionar varias ciudades</div>
+                            <div class="mb-3">
+                              <label class="form-label">Ruta</label>
+                              <select id="changeRouteRuta" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Origen</label>
+                              <select id="changeRouteOrigin" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Destino</label>
+                              <select id="changeRouteDestination" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Ciudades omitidas</label>
+                              <select id="changeRouteSkipCities" class="form-select" multiple></select>
+                              <small class="text-muted">Puedes seleccionar varias ciudades</small>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Omitir tramos</label>
+                              <select id="changeRouteSkipPairs" class="form-select" multiple></select>
+                              <small class="text-muted">Puedes seleccionar varios pares de ciudades</small>
+                            </div>
                           </div>
                           <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Omitir tramos</label>
-                            <select class="form-select form-select-sm select2-multi fw-semibold fs-13" style="font-size:13px;background:#fff;cursor:pointer;border:1px solid #d1d5db;" id="changeRouteSkipPairs" multiple data-placeholder="Selecciona pares de ciudades...">
-                              <option value="Arica-Calama">Arica - Calama</option>
-                              <option value="Arica-Antofagasta">Arica - Antofagasta</option>
-                              <option value="Calama-Antofagasta">Calama - Antofagasta</option>
-                              <option value="Calama-Algarrobo">Calama - Algarrobo</option>
-                              <option value="Antofagasta-Algarrobo">Antofagasta - Algarrobo</option>
-                            </select>
-                            <div class="helper-text fs-10 mg-l-5">Puedes seleccionar varios pares de ciudades</div>
-                          </div>
-                        </div>
-                        <div class="row g-3 mt-1">
-                          <div class="col-md-12">
-                            <label class="form-label text-uppercase text-muted mb-1" style="font-size:12px;letter-spacing:1px;">Secuencia de ciudades</label>
-                            <div id="citySequenceSpan" class="d-flex flex-wrap align-items-center px-0 py-2 fs-13" style="font-size:13px;gap:0.5rem 0.25rem;"></div>
-                          </div>
-                        </div>
-                        <div class="row g-3 mt-1">
-                          <div class="col-md-12">
-                            <div id="changeRouteOrganigram"></div>
+                            <div class="mb-3">
+                              <label class="form-label">Secuencia de ciudades</label>
+                              <div id="citySequenceSpan" class="mb-2"></div>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Mapa de ruta</label>
+                              <div id="routeOrganigramContainer"></div>
+                            </div>
                           </div>
                         </div>
                       </form>
@@ -944,7 +927,7 @@ class ChangeRouteHandler {
   }
 
   renderRouteOrganigram(serviceData, omitCities = [], omitPairs = [], filteredCities = null) {
-    const organigram = document.getElementById('changeRouteOrganigram');
+    const organigram = document.getElementById('routeOrganigramContainer');
     if (!organigram) return;
     // --- Persistencia de estado expandido ---
     let expandedState = {};
