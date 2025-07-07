@@ -909,46 +909,46 @@ class ChangeRouteHandler {
       return { ciudad, hijos };
     });
     organigram.innerHTML = `
-      <div class="route-map-tree-main" style="background:#fff;border-radius:10px;border:1px solid #e5e7eb;">
-        <div class="card-body p-0" style="background:transparent;">
-          <div class="stages-accordion-container accordion" id="routeMapAccordion">
-            <div class="px-3 pt-3 pb-2 border-bottom" style="background:transparent;font-weight:600;font-size:15px;color:#222;">Mapa de ruta <span style="font-weight:400;font-size:13px;color:#666;">(${cities.length} Ciudades, ${cities.length-1} Tramos)</span></div>
-            ${treeData.map((nodo, idx) => {
-              if (nodo.hijos.length === 0) return '';
-              const headingId = `headingOrganigram${idx}`;
-              const collapseId = `collapse${idx}`;
-              return `
-              <div class="accordion-item" style="background:transparent;border:none;">
-                <h2 class="stages-accordion-header accordion-header" id="${headingId}">
-                  <button type="button" aria-expanded="false" class="accordion-button collapsed justify-content-start" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-controls="${collapseId}" style="background:#f9fafb;color:#222;font-size:13px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;">
-                    <span class="w-30-px"><i class="fas fa-caret-right me-2" style="color:#888;"></i></span>
-                    <span style="font-size:13px;">${nodo.ciudad}</span>
-                  </button>
-                </h2>
-                <div id="${collapseId}" class="accordion-collapse collapse${expandedState[`collapse${idx}`] ? ' show' : ''}" aria-labelledby="${headingId}">
-                  <div class="pd-0 accordion-body" style="background:#fff;">
-                    ${nodo.hijos.map(hijo => `
-                      <div class="list-item d-flex align-items-center" style="font-size:13px;">
-                        <span class="me-2" style="color:#bbb;font-size:15px;">&#8226;</span>
-                        <div class="pd-x-25 mg-l-15 flex-grow-1" style="font-size:13px;">${hijo.ciudad}</div>
-                      </div>
-                    `).join('')}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="fw-bold" style="font-size:15px;">Mapa de ruta (${cities.length} Ciudades, ${cities.length-1} Tramos)</div>
+        <button id="expandCollapseAllBtn" class="btn btn-outline-secondary btn-sm" style="font-size:12px;padding:2px 12px;">Expandir todo</button>
+      </div>
+      <div class="stages-accordion-container accordion" id="routeMapAccordion">
+        ${treeData.map((nodo, idx) => {
+          if (nodo.hijos.length === 0) return '';
+          const headingId = `headingOrganigram${idx}`;
+          const collapseId = `collapse${idx}`;
+          return `
+          <div class="accordion-item" style="background:transparent;border:none;">
+            <h2 class="stages-accordion-header accordion-header" id="${headingId}">
+              <button type="button" aria-expanded="false" class="accordion-button collapsed justify-content-start" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-controls="${collapseId}" style="background:#f9fafb;color:#222;font-size:13px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;">
+                <span class="w-30-px"><i class="fas fa-caret-right me-2" style="color:#888;"></i></span>
+                <span style="font-size:13px;">${nodo.ciudad}</span>
+              </button>
+            </h2>
+            <div id="${collapseId}" class="accordion-collapse collapse${expandedState[`collapse${idx}`] ? ' show' : ''}" aria-labelledby="${headingId}">
+              <div class="pd-0 accordion-body" style="background:#fff;">
+                ${nodo.hijos.map(hijo => `
+                  <div class="list-item d-flex align-items-center" style="font-size:13px;">
+                    <span class="me-2" style="color:#bbb;font-size:15px;">&#8226;</span>
+                    <div class="pd-x-25 mg-l-15 flex-grow-1" style="font-size:13px;">${hijo.ciudad}</div>
                   </div>
-                </div>
+                `).join('')}
               </div>
-              `;
-            }).join('')}
+            </div>
           </div>
-        </div>
+          `;
+        }).join('')}
       </div>
     `;
-    // Funcionalidad expandir/colapsar todos
+    // Luego, agrego la lógica para alternar expandir/colapsar todos:
     setTimeout(() => {
       const expandBtn = document.getElementById('expandCollapseAllBtn');
-      const expandText = document.getElementById('expandCollapseAllText');
       let expanded = false;
       if (expandBtn) {
-        expandBtn.onclick = () => {
+        expandBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const acc = document.getElementById('routeMapAccordion');
           if (!acc) return;
           const collapses = acc.querySelectorAll('.accordion-collapse');
@@ -961,7 +961,7 @@ class ChangeRouteHandler {
             }
           });
           expanded = !expanded;
-          expandText.textContent = expanded ? 'Colapsar todos' : 'Expandir todos';
+          expandBtn.textContent = expanded ? 'Colapsar todo' : 'Expandir todo';
         };
       }
     }, 100);

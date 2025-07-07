@@ -915,3 +915,22 @@
   font-weight: 600;
   box-shadow: 0 1.5px 6px rgba(44,62,80,0.08);
 }
+
+#routeOrganigramContainer .accordion-item,
+#routeOrganigramContainer .accordion-header,
+#routeOrganigramContainer .accordion-body,
+#routeOrganigramContainer .list-item {
+  margin-bottom: 2px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+#routeOrganigramContainer .accordion-button {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  min-height: 28px !important;
+}
+#routeOrganigramContainer .list-item {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  font-size: 13px !important;
+}
