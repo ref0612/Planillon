@@ -32,6 +32,7 @@ class ChangeRouteHandler {
     const cells = row.cells;
     return {
       numero: cells[2]?.textContent?.trim() || '',
+      servicio: cells[2]?.textContent?.trim() || '',
       fecha: new Date().toISOString().split('T')[0],
       variante: cells[3]?.textContent?.trim() || '',
       hora: cells[5]?.textContent?.trim() || '',
@@ -785,25 +786,35 @@ class ChangeRouteHandler {
         <div class="modal-dialog modal-lg">
           <div class="modal-content" style="border-radius:16px;border:none;box-shadow:0 8px 32px rgba(0,0,0,0.12);">
             <div class="modal-header" style="border-bottom:1px solid #e9ecef;padding:1.5rem 2rem 1rem;background:#f6f7fa;">
-              <h5 class="modal-title fw-bold text-dark" id="changeRouteModalLabel" style="font-size:20px;letter-spacing:0.5px;">
-                Cambiar Ruta
-              </h5>
+              <div style="width:100%">
+                <h5 class="modal-title fw-bold text-dark" id="changeRouteModalLabel" style="font-size:20px;letter-spacing:0.5px;">
+                  Cambiar Ruta
+                </h5>
+                </div>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0" style="background:#f8f9fb;">
               <div class="px-4 pt-3 pb-2">
-                <ul class="nav nav-tabs border-0 bg-transparent px-0" id="changeRouteTabs" role="tablist" style="border-bottom:none;background:transparent;">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active tab-red-underline" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true" style="font-size:16px;font-weight:600;background:transparent;border:none;border-bottom:3px solid #d32f2f;color:#d32f2f;padding:0.75rem 2.2rem 0.5rem 0;">
-                      Información General
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link tab-gray" id="stages-tab" data-bs-toggle="tab" data-bs-target="#stages" type="button" role="tab" aria-controls="stages" aria-selected="false" style="font-size:16px;font-weight:600;background:transparent;border:none;border-bottom:3px solid transparent;color:#7b809a;padding:0.75rem 2.2rem 0.5rem 0;">
-                      Etapas
-                    </button>
-                  </li>
-                </ul>
+                <div class="d-flex align-items-center justify-content-between" style="border-bottom:1px solid #e9ecef; background:transparent; gap:8px;">
+                  <ul class="nav nav-tabs border-0 bg-transparent px-0" id="changeRouteTabs" role="tablist" style="border-bottom:none; background:transparent;">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active tab-red-underline" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true"
+                        style="font-size:16px;font-weight:600;background:#fff;border:none;border-bottom:3px solid #d32f2f;color:#d32f2f;padding:0.75rem 2.2rem 0.5rem 0;border-radius:8px 8px 0 0;box-shadow:0 2px 6px rgba(0,0,0,0.03);margin-bottom:-1px;">
+                        Información General
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link tab-gray" id="stages-tab" data-bs-toggle="tab" data-bs-target="#stages" type="button" role="tab" aria-controls="stages" aria-selected="false"
+                        style="font-size:16px;font-weight:600;background:#f6f7fa;border:none;border-bottom:3px solid transparent;color:#7b809a;padding:0.75rem 2.2rem 0.5rem 0;border-radius:8px 8px 0 0;margin-bottom:-1px;">
+                        Etapas
+                      </button>
+                    </li>
+                  </ul>
+                  <span class="d-flex align-items-center" style="gap:8px;">
+                    <span style="font-size:16px;font-weight:600;color:#7b809a;">Servicio</span>
+                    <input type="text" class="form-control form-control-sm" value="${serviceData.servicio || ''}" readonly style="width:auto;min-width:180px;max-width:320px;font-size:15px;font-weight:600;color:#495057;background:#f8f9fa;border:1px solid #e0e3e7;box-shadow:none;">
+                  </span>
+                </div>
               </div>
               <div class="tab-content px-4 pb-4" id="changeRouteTabContent">
                 <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
@@ -811,43 +822,95 @@ class ChangeRouteHandler {
                     <div class="card-body pb-2 pt-3 px-4">
                       <form id="changeRouteForm">
                         <div class="row">
-                          <div class="col-md-4">
-                            <div class="mb-3">
-                              <label class="form-label">Ruta</label>
-                              <select id="changeRouteRuta" class="form-select"></select>
+                          <div class="col-md-6">
+                            <!-- Sección Principal: Configuración Básica -->
+                            <div class="mb-4">
+                              <h6 class="fw-bold text-dark mb-3" style="font-size:16px;display:flex;align-items:center;">
+                                <i class="fas fa-route me-2" style="color:#d32f2f;font-size:14px;"></i>
+                                Configuración de Ruta
+                              </h6>
+                              <div class="mb-3">
+                                <label class="form-label fw-semibold">Ruta</label>
+                                <select id="changeRouteRuta" class="form-select"></select>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="mb-3">
+                                    <label class="form-label fw-semibold">Origen</label>
+                                    <select id="changeRouteOrigin" class="form-select select-compact"></select>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="mb-3">
+                                    <label class="form-label fw-semibold">Destino</label>
+                                    <select id="changeRouteDestination" class="form-select select-compact"></select>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div class="mb-3">
-                              <label class="form-label">Origen</label>
-                              <select id="changeRouteOrigin" class="form-select"></select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Destino</label>
-                              <select id="changeRouteDestination" class="form-select"></select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Omitir Ciudades</label>
-                              <select id="changeRouteSkipCities" multiple></select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Omitir tramos</label>
-                              <select id="changeRouteSkipPairs" multiple></select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Omitir ciudades de la web</label>
-                              <select id="changeRouteSkipCitiesWeb" multiple></select>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Omitir tramos de la web</label>
-                              <select id="changeRouteSkipPairsWeb" multiple></select>
+
+                            <!-- Sección Avanzada: Configuración de Omisiones -->
+                            <div class="mb-4">
+                              <h6 class="fw-bold text-dark mb-3" style="font-size:16px;display:flex;align-items:center;">
+                                <i class="fas fa-sliders-h me-2" style="color:#d32f2f;font-size:14px;"></i>
+                                Configuración de Omisiones
+                              </h6>
+                              
+                                                             <!-- Subsección: Omisión Lógica -->
+                               <div class="mb-3">
+                                 <h6 class="text-muted mb-2" style="font-size:14px;font-weight:600;">
+                                   <i class="fas fa-cog me-1" style="color:#6c757d;font-size:12px;"></i>
+                                   Omisión General
+                                 </h6>
+                                 <div class="row">
+                                   <div class="col-md-6">
+                                     <div class="mb-3">
+                                       <label class="form-label">Omitir Ciudades</label>
+                                       <select id="changeRouteSkipCities" multiple class="select-compact"></select>
+                                     </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                     <div class="mb-3">
+                                       <label class="form-label">Omitir Tramos</label>
+                                       <select id="changeRouteSkipPairs" multiple class="select-compact select-compact-tramos"></select>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+
+                              <!-- Separador visual -->
+                              <hr class="my-3" style="border-color:#e9ecef;opacity:0.6;">
+
+                                                             <!-- Subsección: Omisión Web -->
+                               <div class="mb-3">
+                                 <h6 class="text-muted mb-2" style="font-size:14px;font-weight:600;">
+                                   <i class="fas fa-globe me-1" style="color:#6c757d;font-size:12px;"></i>
+                                   Omisión Web
+                                 </h6>
+                                 <div class="row">
+                                   <div class="col-md-6">
+                                     <div class="mb-3">
+                                       <label class="form-label">Omitir Ciudades de la Web</label>
+                                       <select id="changeRouteSkipCitiesWeb" multiple class="select-compact select-compact-tramos"></select>
+                                     </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                     <div class="mb-3">
+                                       <label class="form-label">Omitir Tramos de la Web</label>
+                                       <select id="changeRouteSkipPairsWeb" multiple class="select-compact select-compact-tramos"></select>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
                             </div>
                           </div>
-                          <div class="col-md-8">
+                          <div class="col-md-6">
                             <div class="mb-3">
-                              <label class="form-label">Secuencia de ciudades</label>
+                              <label class="form-label fw-semibold">Secuencia de ciudades</label>
                               <div id="citySequenceSpan" class="mb-2"></div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label">Mapa de ruta</label>
+                              <label class="form-label fw-semibold">Mapa de ruta</label>
                               <div id="routeOrganigramContainer"></div>
                             </div>
                           </div>
