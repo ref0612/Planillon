@@ -170,16 +170,16 @@
         <h4 class="mb-2" style="font-size: 14px; font-weight: 700; text-align: center; color: #444;">Resumen</h4>
         <div class="d-flex justify-content-center mb-2">
           <div class="btn-group btn-group-sm" role="group" aria-label="Vista de tarifas">
-            <input type="radio" class="btn-check" name="tarifaView" id="categoriasView" autocomplete="off" checked>
-            <label class="btn btn-light border me-1" for="categoriasView" style="font-size: 13px;">Categorías</label>
-            <input type="radio" class="btn-check" name="tarifaView" id="asientosView" autocomplete="off">
+            <input type="radio" class="btn-check" name="tarifaView" id="asientosView" autocomplete="off" checked>
             <label class="btn btn-light border" for="asientosView" style="font-size: 13px;">Asientos</label>
-          </div>
+            <input type="radio" class="btn-check" name="tarifaView" id="categoriasView" autocomplete="off">
+            <label class="btn btn-light border me-1" for="categoriasView" style="font-size: 13px;">Categorías</label>
+            </div>
         </div>
       </div>
       
       <!-- Tabla de Categorías -->
-      <div id="categoriasTabla" class="px-3 pb-3">
+      <div id="categoriasTabla" class="px-3 pb-3" style="display: none;">
         <table class="tariff-table">
           <thead style="display: none;">
             <tr>
@@ -204,7 +204,7 @@
       
       
       <!-- Tabla de Asientos -->
-      <div id="asientosTabla" class="px-3 pb-3" style="display: none;">
+      <div id="asientosTabla" class="px-3 pb-3" style="display: block;">
         <table class="tariff-table">
           <tbody>
             <tr><td>Clásico</td><td>150</td></tr>
@@ -232,15 +232,15 @@
           <div class="detail-header">
             <h2>Detalle de servicios</h2>
             <div class="btn-group btn-group-sm" role="group" aria-label="Vista de servicios">
-              <input type="radio" class="btn-check" name="serviciosView" id="serviciosCategoriasView" autocomplete="off" checked>
-              <label class="btn btn-light border me-1" for="serviciosCategoriasView" style="font-size: 13px;">Categorías</label>
-              <input type="radio" class="btn-check" name="serviciosView" id="serviciosAsientosView" autocomplete="off">
-              <label class="btn btn-light border" for="serviciosAsientosView" style="font-size: 13px;">Asientos</label>
-            </div>
+              <input type="radio" class="btn-check" name="serviciosView" id="serviciosAsientosView" autocomplete="off" checked>
+              <label class="btn btn-light border me-1" for="serviciosAsientosView" style="font-size: 13px;">Asientos</label>
+              <input type="radio" class="btn-check" name="serviciosView" id="serviciosCategoriasView" autocomplete="off">
+              <label class="btn btn-light border" for="serviciosCategoriasView" style="font-size: 13px;">Categorías</label>
+              </div>
           </div>
 
           <!-- Tabla de servicios por asientos (oculta por defecto, debes poblarla con tus datos de asientos) -->
-          <div id="serviciosAsientosTabla" style="display: none;">
+          <div id="serviciosAsientosTabla" style="display: block;">
             <div class="table-wrapper">
               <table class="detail-table with-summary-buttons">
                 <thead>
@@ -267,7 +267,7 @@
           </div>
 
           <!-- Tabla de servicios por categorías (original) -->
-          <div id="serviciosCategoriasTabla">
+          <div id="serviciosCategoriasTabla" style="display: none;">
             <div class="table-wrapper">
               <table class="detail-table with-summary-buttons">
                 <thead>

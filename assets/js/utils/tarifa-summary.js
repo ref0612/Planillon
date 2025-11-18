@@ -283,9 +283,9 @@ class TarifaSummary {
             }
         }
         
-        // Asegurar que la vista de categorías esté visible por defecto
+        // Asegurar que la vista de asientos esté visible por defecto
         setTimeout(() => {
-            this.switchView('categorias');
+            this.switchView('asientos');
         }, 100);
     }
 
