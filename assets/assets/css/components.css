@@ -1,0 +1,46 @@
+/* Select compacto para formularios en modales */
+.select-compact {
+  max-width: 180px;
+  min-width: 120px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.95em;
+  line-height: 1.2;
+}
+/* Para selects múltiples, no forzar height fijo */
+select[multiple].select-compact, .select2-container--default .select2-selection--multiple.select-compact {
+  height: auto !important;
+  min-height: 38px;
+}
+
+/* Solución definitiva para Select2 múltiple: tags en varias líneas y input pequeño */
+.select2-container--default .select2-selection--multiple.select-compact-tramos {
+  min-height: 38px;
+  max-height: none;
+  overflow-y: visible;
+  padding-bottom: 2px;
+  display: block;
+}
+
+.select2-container--default .select2-selection--multiple.select-compact-tramos .select2-selection__rendered {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  white-space: normal !important;
+  width: 100%;
+  align-items: flex-start;
+  padding-right: 0;
+}
+
+.select2-container--default .select2-selection--multiple.select-compact-tramos .select2-selection__choice {
+  font-size: 12px;
+  padding: 2px 8px;
+  margin-bottom: 2px;
+  margin-right: 4px;
+}
+
+.select2-container--default .select2-selection--multiple.select-compact-tramos .select2-search--inline {
+  width: 40px !important;
+  min-width: 40px !important;
+  flex: 0 0 40px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+} 

@@ -263,12 +263,7 @@ class EditServiceHandler {
                             <div class="col-md-6">
                                 <div class="form-group-styled">
                                     <label class="form-label">Ruta</label>
-                                    <select class="form-select form-select-styled" id="editServiceRuta">
-                                        <option value="melipilla-santiago" selected>Melipilla - Stgo x Terminal</option>
-                                        <option value="santiago-melipilla">Santiago - Melipilla x Terminal</option>
-                                        <option value="valparaiso-santiago">Valparaíso - Santiago</option>
-                                        <option value="santiago-valparaiso">Santiago - Valparaíso</option>
-                                    </select>
+                                    <input type="text" class="form-control form-control-styled" value="${serviceData.variante || ''}" id="editServiceRuta" readonly>
                                 </div>
                                 <div class="form-group-styled">
                                     <label class="form-label">Hora salida</label>
@@ -428,16 +423,14 @@ class EditServiceHandler {
                 return;
             }
 
-            // Verificar si hay cambio de bus que requiere reasignación de asientos
-            console.log('Bus original:', this.currentServiceData?.bus, 'Bus nuevo:', formData.bus);
-            
-            if (this.requiresSeatReassignment(formData)) {
-                console.log('Se requiere reasignación de asientos');
+            // Detectar cambios
+            const busChanged = this.requiresSeatReassignment(formData);
+            // Si solo cambia el bus
+            if (busChanged) {
                 this.showSeatReassignmentStep(formData);
                 return;
             }
-
-            // Guardar directamente si no hay cambio de bus
+            // Guardar directamente si no hay cambios críticos
             this.saveServiceData(formData);
             this.closeModal();
             this.showSuccess('Los cambios se han guardado correctamente');

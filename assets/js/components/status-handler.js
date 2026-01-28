@@ -64,35 +64,43 @@ class StatusHandler {
     setupEventListeners() {
         // Event delegation para indicadores de estado
         document.addEventListener('click', (e) => {
-            const statusIndicator = e.target.closest('.status-indicator');
-            if (statusIndicator) {
-                this.handleStatusClick(statusIndicator, e);
+            if (e.target && typeof e.target.closest === 'function') {
+                const statusIndicator = e.target.closest('.status-indicator');
+                if (statusIndicator) {
+                    this.handleStatusClick(statusIndicator, e);
+                }
             }
         });
 
         // Event listeners mejorados para opciones de estado en modal
         document.addEventListener('click', (e) => {
-            const statusOption = e.target.closest('.status-option');
-            if (statusOption) {
-                const status = statusOption.dataset.status;
-                if (status) {
-                    this.selectStatus(status);
+            if (e.target && typeof e.target.closest === 'function') {
+                const statusOption = e.target.closest('.status-option');
+                if (statusOption) {
+                    const status = statusOption.dataset.status;
+                    if (status) {
+                        this.selectStatus(status);
+                    }
                 }
             }
         });
 
         // Event listener para hover effects
         document.addEventListener('mouseenter', (e) => {
-            const statusOption = e.target.closest('.status-option');
-            if (statusOption && !statusOption.classList.contains('selected')) {
-                this.applyHoverEffect(statusOption);
+            if (e.target && typeof e.target.closest === 'function') {
+                const statusOption = e.target.closest('.status-option');
+                if (statusOption && !statusOption.classList.contains('selected')) {
+                    this.applyHoverEffect(statusOption);
+                }
             }
         }, true);
 
         document.addEventListener('mouseleave', (e) => {
-            const statusOption = e.target.closest('.status-option');
-            if (statusOption && !statusOption.classList.contains('selected')) {
-                this.removeHoverEffect(statusOption);
+            if (e.target && typeof e.target.closest === 'function') {
+                const statusOption = e.target.closest('.status-option');
+                if (statusOption && !statusOption.classList.contains('selected')) {
+                    this.removeHoverEffect(statusOption);
+                }
             }
         }, true);
     }
